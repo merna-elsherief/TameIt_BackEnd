@@ -57,7 +57,7 @@ public class AuthService {
     }
 
     private void sendVerificationEmail(User user) {
-        String verificationLink = "http://localhost:8090/api/auth/verify-email?token=" + user.getVerificationToken();
+        String verificationLink = "https://tameit.azurewebsites.net/api/auth/verify-email?token=" + user.getVerificationToken();
         System.out.println("Link is sent" + verificationLink);
         emailSenderService.sendVerificationEmail(user.getEmail(), "Verification Email",verificationLink);
     }
