@@ -19,7 +19,7 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final String[] PUBLIC_URLS = {
-            "/auth/**", "/welcome"
+            "/auth/**", "/welcome","/auth/forgotPassword/**"
     };
 
     @Autowired

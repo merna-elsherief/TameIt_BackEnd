@@ -12,7 +12,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public boolean verifyEmail(String token){
-        User user = userRepository.findByVerificationToken(token);
+        User user = userRepository.findByVerificationToken(token).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
         if (user != null && !user.isEmailVerified()) {
             user.setEmailVerified(true);
             user.setVerificationToken(null);

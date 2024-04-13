@@ -20,7 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import static com.pro.tameit.util.OtpUtil.generateOtp;
 
 @RestController
-@RequestMapping("/forgotPassword")
+@RequestMapping
 @RequiredArgsConstructor
 public class ForgetPasswordController {
 
@@ -28,7 +28,7 @@ public class ForgetPasswordController {
     private final EmailSenderService emailSenderService;
     private final ForgetPasswordRepository forgetPasswordRepo;
     private final BCryptPasswordEncoder passwordEncoder;
-    @PostMapping("/verifyEmail/{userName}")
+    @PostMapping("/auth/forgotPassword/verifyEmail/{userName}")
     public ResponseEntity<?> verifyEmail(@PathVariable String userName){
         User user = userRepo.findByUserName(userName).orElseThrow(()->new RuntimeException("Please provide an valid userName!" + userName));
         String otp = generateOtp();
@@ -45,7 +45,7 @@ public class ForgetPasswordController {
                 "This is The OTP Requested" + otp);
         return ResponseEntity.ok("Email Sent For Verification");
     }
-    @PostMapping("/verifyOtp/{otp}/{userName}")
+    @PostMapping("/auth/forgotPassword/verifyOtp/{otp}/{userName}")
     public ResponseEntity<?> verifyOtp(@PathVariable String otp, @PathVariable String userName){
         User user = userRepo.findByUserName(userName).orElseThrow(()->new RuntimeException("Please provide an valid userName!" + userName));
         // Check If the OTP is correct or not
@@ -58,7 +58,7 @@ public class ForgetPasswordController {
         }
         return ResponseEntity.ok("OTP Verified");
     }
-    @PostMapping("/resetPassword/{userName}")
+    @PostMapping("/auth/forgotPassword/resetPassword/{userName}")
     public ResponseEntity<?> resetPasswordHandler(@RequestBody ResetPasswordRequest request
             , @PathVariable String userName){
         //Check If New Password == Confirm Password or not
