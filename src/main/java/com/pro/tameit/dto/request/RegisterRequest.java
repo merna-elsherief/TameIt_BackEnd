@@ -2,17 +2,19 @@ package com.pro.tameit.dto.request;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtRequest {
+public class RegisterRequest {
 
     @Size(min = 3, message = "Username must be at least 3 characters long")
     @NotBlank(message = "Username is required")

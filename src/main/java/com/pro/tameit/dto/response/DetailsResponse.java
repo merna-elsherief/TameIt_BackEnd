@@ -1,13 +1,15 @@
 package com.pro.tameit.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class JwtResponse {
-
-    private String token;
+@NoArgsConstructor
+public class DetailsResponse {
+    private String userName;
+    private String email;
 }

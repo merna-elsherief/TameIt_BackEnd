@@ -2,18 +2,16 @@ package com.pro.tameit.services;
 
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.repo.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorService {
-
-    @Autowired
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
 
     public List<String> getAll() {
         List<Doctor> doctors = doctorRepository.findAll();

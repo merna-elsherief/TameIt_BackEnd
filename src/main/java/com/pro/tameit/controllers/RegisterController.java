@@ -1,11 +1,8 @@
 package com.pro.tameit.controllers;
-
-import com.pro.tameit.dto.request.JwtRequest;
-import com.pro.tameit.dto.response.JwtResponse;
-import com.pro.tameit.services.AuthService;
+import com.pro.tameit.dto.request.RegisterRequest;
+import com.pro.tameit.services.AuthenticationService;
 import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,13 +18,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RegisterController {
 
-    private final AuthService authService;
-    @Autowired
-    private UserService userService;
+    private final AuthenticationService service;
+    private final UserService userService;
 
 
     @PostMapping("/auth/register")
-    public ResponseEntity<?> register(@Valid @RequestBody JwtRequest request, BindingResult bindingResult) {
+    public ResponseEntity<?> register(
+            @Valid
+            @RequestBody
+            RegisterRequest request,
+            BindingResult bindingResult) {
         try {
             List<String> errors = bindingResult.getAllErrors()
                     .stream()
@@ -42,14 +42,11 @@ public class RegisterController {
                 return ResponseEntity.badRequest().body(errors);
             }
 
-            JwtResponse response = authService.register(request);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(service.register(request));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
         }
     }
-
-
     @GetMapping("/auth/verify-email")
     public ResponseEntity<?> verifyEmail(@RequestParam String token){
         boolean verified = userService.verifyEmail(token);

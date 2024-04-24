@@ -8,15 +8,12 @@ import com.pro.tameit.services.EmailSenderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.pro.tameit.dto.request.ResetPasswordRequest;
-
 import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import static com.pro.tameit.util.OtpUtil.generateOtp;
 
 @RestController
@@ -27,7 +24,7 @@ public class ForgetPasswordController {
     private final UserRepository userRepo;
     private final EmailSenderService emailSenderService;
     private final ForgetPasswordRepository forgetPasswordRepo;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     @PostMapping("/auth/forgotPassword/verifyEmail/{userName}")
     public ResponseEntity<?> verifyEmail(@PathVariable String userName){
         User user = userRepo.findByUserName(userName).orElseThrow(()->new RuntimeException("Please provide an valid userName!" + userName));

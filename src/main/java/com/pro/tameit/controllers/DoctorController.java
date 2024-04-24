@@ -1,7 +1,7 @@
 package com.pro.tameit.controllers;
 
 import com.pro.tameit.services.DoctorService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/auth/doctor")
+@RequiredArgsConstructor
 public class DoctorController {
-    @Autowired
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors() {

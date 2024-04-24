@@ -1,31 +1,25 @@
 package com.pro.tameit.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
-@Entity
-@Table(name = "patients")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "patients")
 public class Patient {
     @Id
-    @GeneratedValue(generator = "patient_generator")
-    @SequenceGenerator(
-            name = "patient_generator",
-            sequenceName = "patient_sequence",
-            allocationSize = 1,
-            initialValue = 1
-    )
+    @GeneratedValue
     private Long id;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)

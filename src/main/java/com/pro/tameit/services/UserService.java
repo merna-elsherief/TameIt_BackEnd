@@ -2,14 +2,13 @@ package com.pro.tameit.services;
 
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public boolean verifyEmail(String token){
         User user = userRepository.findByVerificationToken(token).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));

@@ -1,25 +1,21 @@
 package com.pro.tameit.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
-@Entity
-@Table(name = "clinics")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "clinics")
 public class Clinic {
     @Id
-    @GeneratedValue(generator = "clinic_generator")
-    @SequenceGenerator(
-            name = "clinic_generator",
-            sequenceName = "clinic_sequence",
-            initialValue = 1,
-            allocationSize = 1
-    )
+    @GeneratedValue
     private Long id;
     @Column(nullable = false, unique = true)
     private String clinicName;

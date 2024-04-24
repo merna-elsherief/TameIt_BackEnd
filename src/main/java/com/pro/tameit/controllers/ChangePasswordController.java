@@ -3,10 +3,10 @@ package com.pro.tameit.controllers;
 import com.pro.tameit.dto.request.ChangePasswordRequest;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("auth/changePassword")
 public class ChangePasswordController {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
