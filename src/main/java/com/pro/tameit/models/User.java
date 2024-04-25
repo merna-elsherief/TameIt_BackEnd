@@ -1,5 +1,6 @@
 package com.pro.tameit.models;
 
+import com.pro.tameit.dto.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class User implements UserDetails {
 
     @ColumnDefault("false")
     private boolean isEmailVerified;
+
 
     @Enumerated(EnumType.STRING)
     private ERole role;

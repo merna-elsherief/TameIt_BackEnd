@@ -5,16 +5,16 @@ import com.pro.tameit.dto.request.AuthenticationRequest;
 import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.dto.response.AuthenticationResponse;
 import com.pro.tameit.dto.response.DetailsResponse;
-import com.pro.tameit.models.ERole;
+import com.pro.tameit.dto.ERole;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import static com.pro.tameit.util.VerificationTokenUtil.generateToken;
 
 @Service
@@ -49,23 +49,25 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = userRepository.findByUserName(request.getUserName())
+        User user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
-    public DetailsResponse details( String userName){
-        var user = userRepository.findByUserName(userName)
+    public DetailsResponse details( ){
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUserName(userName)
                 .orElseThrow();
         return DetailsResponse.builder()
                 .userName(user.getUsername())
                 .email(user.getEmail())
                 .build();
     }
+    //not best practice
         private void sendVerificationEmail(User user) {
-        String verificationLink = "https://tameit.azurewebsites.net/api/auth/verify-email?token=" + user.getVerificationToken();
+        String verificationLink = "This your verification mail: \n You should Click This Link to be verified \n https://tameit.azurewebsites.net/api/auth/verify-email?token=" + user.getVerificationToken();
         log.info("Link is sent" + verificationLink);
         emailSenderService.sendVerificationEmail(user.getEmail(), "Verification Email",verificationLink);
     }

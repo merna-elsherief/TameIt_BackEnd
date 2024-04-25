@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class DetailsController {
     private final AuthenticationService service;
-    @PostMapping("/details/{userName}")
-    public ResponseEntity<?> details(@PathVariable String userName) {
+    @PostMapping("/details")
+    public ResponseEntity<?> details() {
         try {
-            return ResponseEntity.ok(service.details(userName));
+            return ResponseEntity.ok(service.details());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         }

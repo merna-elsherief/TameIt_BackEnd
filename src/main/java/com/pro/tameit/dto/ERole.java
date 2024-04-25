@@ -1,4 +1,4 @@
-package com.pro.tameit.models;
+package com.pro.tameit.dto;
 
 public enum ERole {
     USER,
