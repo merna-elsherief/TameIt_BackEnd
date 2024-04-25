@@ -24,15 +24,23 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(unique = true)
+
+    @Column(nullable = false,unique = true)
     private String userName;
+
     private String password;
+
     @Transient
     private String confirmPassword;
+
+    @Column(nullable = false,unique = true)
     private String email;
+
     private String verificationToken;
+
     @ColumnDefault("false")
     private boolean isEmailVerified;
+
     @Enumerated(EnumType.STRING)
     private ERole role;
 

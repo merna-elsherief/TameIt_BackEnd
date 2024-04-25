@@ -9,6 +9,7 @@ import com.pro.tameit.models.ERole;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import static com.pro.tameit.util.VerificationTokenUtil.generateToken;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -26,7 +28,7 @@ public class AuthenticationService {
     private final EmailSenderService emailSenderService;
     public AuthenticationResponse register(RegisterRequest request){
         String token = generateToken();
-        var user = User.builder()
+        User user = User.builder()
                 .userName(request.getUserName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -35,7 +37,7 @@ public class AuthenticationService {
                 .build();
         userRepository.save(user);
         sendVerificationEmail(user);
-        var jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
@@ -64,7 +66,7 @@ public class AuthenticationService {
     }
         private void sendVerificationEmail(User user) {
         String verificationLink = "https://tameit.azurewebsites.net/api/auth/verify-email?token=" + user.getVerificationToken();
-        System.out.println("Link is sent" + verificationLink);
+        log.info("Link is sent" + verificationLink);
         emailSenderService.sendVerificationEmail(user.getEmail(), "Verification Email",verificationLink);
     }
 }

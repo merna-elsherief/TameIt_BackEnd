@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.pro.tameit.dto.ESpecial;
 
 import jakarta.persistence.*;
 
@@ -17,6 +18,8 @@ public class Specialization {
     @Id
     @GeneratedValue
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private String specializationName;
+    private ESpecial specializationName;
 }

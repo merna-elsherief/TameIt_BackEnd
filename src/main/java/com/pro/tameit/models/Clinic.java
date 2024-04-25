@@ -17,10 +17,13 @@ public class Clinic {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(nullable = false, unique = true)
     private String clinicName;
-    @Column(nullable = false)
+
+    @Column(nullable = false,unique = true)
     private String address;
-    @Column(nullable = false)
+
+    @Column(nullable = false,unique = true)
     private String phoneNumber;
 }
