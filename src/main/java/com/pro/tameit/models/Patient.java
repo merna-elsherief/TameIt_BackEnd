@@ -9,6 +9,8 @@ import com.pro.tameit.dto.EGender;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,8 +28,10 @@ public class Patient {
 
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     @Column(nullable = false,unique = true)
     private String phoneNumber;
 
@@ -40,4 +44,15 @@ public class Patient {
 
     @Column(nullable = false)
     private Long age;
+
+
+    @Column(nullable = false)
+    private String city;
+
+    @Column(nullable = false)
+    private String country;
+
+    @Column(nullable = false)
+    private Date birthDate;
+
 }

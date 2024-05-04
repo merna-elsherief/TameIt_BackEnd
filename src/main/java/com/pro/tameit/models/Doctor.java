@@ -1,5 +1,6 @@
 package com.pro.tameit.models;
 
+import com.pro.tameit.dto.DoctorJobTitle;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -44,9 +45,23 @@ public class Doctor {
 
     @Column(nullable = false)
     private String firstName;
+
     @Column(nullable = false)
     private String lastName;
+
     @Column(nullable = false,unique = true)
     private String phoneNumber;
 
+    @Column(nullable = false)
+    private Integer price;
+
+    @Column(nullable = false)
+    private Integer rating;
+
+    @Column(nullable = false)
+    private Integer yearsOfExperience;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private DoctorJobTitle jobTitle;
 }

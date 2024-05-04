@@ -1,4 +1,4 @@
-package com.pro.tameit.services;
+package com.pro.tameit.cloudinary.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.cloudinary.Cloudinary;
+import com.pro.tameit.cloudinary.services.UploadImage;
 
 @Service
 @RequiredArgsConstructor
-public class UploadImageImp implements UploadImage{
+public class UploadImageImp implements  UploadImage{
 
     private final Cloudinary cloudinary;
     @Override

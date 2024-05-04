@@ -6,7 +6,9 @@ import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.dto.response.AuthenticationResponse;
 import com.pro.tameit.dto.response.DetailsResponse;
 import com.pro.tameit.dto.ERole;
+import com.pro.tameit.models.Patient;
 import com.pro.tameit.models.User;
+import com.pro.tameit.repo.PatientRepository;
 import com.pro.tameit.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import static com.pro.tameit.util.VerificationTokenUtil.generateToken;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthenticationService {
+    private final PatientRepository patientRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -33,9 +36,15 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .verificationToken(token)
-                .role(ERole.USER)
+                //Because he is registering
+                .role(ERole.PATIENT)
                 .build();
         userRepository.save(user);
+        //Add User to Patient DB
+        Patient patient = Patient.builder()
+                .user(user)
+                .build();
+        patientRepository.save(patient);
         sendVerificationEmail(user);
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
@@ -54,15 +63,6 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .build();
-    }
-    public DetailsResponse details( ){
-        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow();
-        return DetailsResponse.builder()
-                .userName(user.getUsername())
-                .email(user.getEmail())
                 .build();
     }
     //not best practice

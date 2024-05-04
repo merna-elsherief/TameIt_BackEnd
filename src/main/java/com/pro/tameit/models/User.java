@@ -1,5 +1,6 @@
 package com.pro.tameit.models;
 
+import com.pro.tameit.cloudinary.models.Image;
 import com.pro.tameit.dto.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,10 @@ public class User implements UserDetails {
 
     @Column(nullable = false,unique = true)
     private String email;
+
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     private String verificationToken;
 

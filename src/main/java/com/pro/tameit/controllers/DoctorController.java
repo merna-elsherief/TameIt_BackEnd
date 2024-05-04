@@ -1,6 +1,6 @@
 package com.pro.tameit.controllers;
 
-import com.pro.tameit.services.DoctorService;
+import com.pro.tameit.services.DoctorServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/auth/doctor")
 @RequiredArgsConstructor
 public class DoctorController {
-    private final DoctorService doctorService;
+    private final DoctorServiceImpl doctorService;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors() {

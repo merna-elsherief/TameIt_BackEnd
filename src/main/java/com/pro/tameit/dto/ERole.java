@@ -1,7 +1,7 @@
 package com.pro.tameit.dto;
 
 public enum ERole {
-    USER,
+    PATIENT,
     ADMIN,
     DOCTOR
 }
