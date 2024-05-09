@@ -18,7 +18,7 @@ public class ImageController {
     private final ImageService imageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<Map> upload(ImageModel imageModel) {
+    public ResponseEntity<?> upload(ImageModel imageModel) {
         try {
             return imageService.uploadImage(imageModel);
         } catch (Exception e) {

@@ -46,4 +46,5 @@ public class DoctorController {
             return ResponseEntity.ok(sortedDoctorList);
         }
     }
+
 }

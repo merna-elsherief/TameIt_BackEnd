@@ -7,5 +7,7 @@ import java.util.Map;
 
 public interface ImageService {
 
-    ResponseEntity<Map> uploadImage(ImageModel imageModel);
+    ResponseEntity<?> uploadImage(ImageModel imageModel);
+
+    ResponseEntity<Map> changeUserImage(ImageModel imageModel);
 }
