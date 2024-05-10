@@ -1,13 +1,12 @@
 package com.pro.tameit.controllers;
 
+import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.services.DoctorServiceImpl;
+import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorServiceImpl doctorService;
+    private final UserService userService;
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors() {
@@ -46,5 +46,13 @@ public class DoctorController {
             return ResponseEntity.ok(sortedDoctorList);
         }
     }
-
+    @GetMapping("/doctorCard/{userName}")
+    public ResponseEntity<?> doctorCard(@PathVariable String userName) {
+        try {
+            DoctorCardResponse doctorCardResponse = userService.doctorCard(userName);
+            return ResponseEntity.status(HttpStatus.OK).body(doctorCardResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doctor doesn't found.");
+        }
+    }
 }

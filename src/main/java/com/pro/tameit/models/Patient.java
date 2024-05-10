@@ -26,33 +26,33 @@ public class Patient {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String lastName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = true,unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String address;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private EGender gender;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long age;
 
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String city;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String country;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Date birthDate;
 
 }

@@ -1,7 +1,6 @@
 package com.pro.tameit.controllers;
 
-import com.pro.tameit.services.AuthenticationService;
-import com.pro.tameit.services.UserService;
+import com.pro.tameit.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 @RequiredArgsConstructor
 public class DetailsController {
-    private final UserService service;
+    private final UserServiceImpl service;
     @GetMapping("/auth/userDetails")
     public ResponseEntity<?> userDetails() {
         try {

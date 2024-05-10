@@ -2,7 +2,6 @@ package com.pro.tameit.controllers;
 
 import com.pro.tameit.dto.request.PatientRequest;
 import com.pro.tameit.services.PatientService;
-import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
