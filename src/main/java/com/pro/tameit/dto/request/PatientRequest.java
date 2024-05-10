@@ -15,7 +15,7 @@ public class PatientRequest {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private EGender gender;
+    //private EGender gender;
     private String city;
     private String country;
     private String birthDate;

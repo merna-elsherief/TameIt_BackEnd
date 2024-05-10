@@ -26,7 +26,7 @@ public class Doctor {
     private User user;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private EGender gender;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -43,25 +43,25 @@ public class Doctor {
     )
     private List<Clinic> clinics;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String lastName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = true,unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer price;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer rating;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer yearsOfExperience;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = true)
     private DoctorJobTitle jobTitle;
 }

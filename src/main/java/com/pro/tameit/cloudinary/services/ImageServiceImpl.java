@@ -62,6 +62,7 @@ public class ImageServiceImpl implements ImageService {
             User user = userRepository.findByUserName(userName)
                     .orElseThrow();
             user.setImage(image);
+            imageRepository.save(image);
             userRepository.save(user);
             return ResponseEntity.ok().body(Map.of("url", image.getUrl()));
         } catch (Exception e) {
