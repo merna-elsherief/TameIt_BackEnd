@@ -17,7 +17,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     private Cloudinary cloudinary;
 
     @Override
-    public String uploadFile(MultipartFile file, String folderName) throws IOException{
+    public String uploadFile(MultipartFile file, String folderName) {
         try{
             HashMap<Object, Object> options = new HashMap<>();
             options.put("folder", folderName);

@@ -19,31 +19,43 @@ public class DoctorController {
 
     @GetMapping("/getAll")
     public ResponseEntity<?> getAllDoctors() {
-        List<String> doctorList = doctorService.getAll();
-        if(doctorList.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found ");
-        }
-        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+       try {
+            List<String> doctorList = doctorService.getAll();
+            if (doctorList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found ");
+            }
+            return new ResponseEntity<>(doctorList, HttpStatus.OK);
+       }catch (Exception e) {
+           return ResponseEntity.badRequest().body("Get failed: " + e.getMessage());
+       }
     }
 
     @GetMapping("/byName")
     public ResponseEntity<?> searchDoctors(@RequestParam String searchTerm) {
-        List<String> doctorList = doctorService.searchDoctors(searchTerm);
-        if (doctorList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found for the given search term");
-        } else {
-            return new ResponseEntity<>(doctorList, HttpStatus.OK);
+        try {
+            List<String> doctorList = doctorService.searchDoctors(searchTerm);
+            if (doctorList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found for the given search term");
+            } else {
+                return new ResponseEntity<>(doctorList, HttpStatus.OK);
+            }
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body("Search failed: " + e.getMessage());
         }
     }
 
     @GetMapping("/sort")
     public ResponseEntity<?> sortDoctors(@RequestParam(required = false, defaultValue = "asc") String order) {
-        List<String> sortedDoctorList = doctorService.sortDoctors(order);
+        try {
+            List<String> sortedDoctorList = doctorService.sortDoctors(order);
 
-        if (sortedDoctorList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
-        } else {
-            return ResponseEntity.ok(sortedDoctorList);
+            if (sortedDoctorList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
+            } else {
+                return ResponseEntity.ok(sortedDoctorList);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("sort failed: " + e.getMessage());
         }
     }
     @GetMapping("/doctorCard/{userName}")
