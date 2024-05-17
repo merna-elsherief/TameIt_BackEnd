@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.pro.tameit.dto.EGender;
+import com.pro.tameit.domain.EGender;
 
 
 import jakarta.persistence.*;

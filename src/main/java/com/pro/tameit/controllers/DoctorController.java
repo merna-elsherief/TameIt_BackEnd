@@ -1,6 +1,7 @@
 package com.pro.tameit.controllers;
 
 import com.pro.tameit.dto.response.DoctorCardResponse;
+import com.pro.tameit.services.DoctorService;
 import com.pro.tameit.services.DoctorServiceImpl;
 import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequestMapping("/auth/doctor")
 @RequiredArgsConstructor
 public class DoctorController {
-    private final DoctorServiceImpl doctorService;
+    private final DoctorService doctorService;
     private final UserService userService;
 
     @GetMapping("/getAll")

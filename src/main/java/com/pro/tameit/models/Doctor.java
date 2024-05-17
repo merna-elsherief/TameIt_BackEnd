@@ -1,12 +1,12 @@
 package com.pro.tameit.models;
 
-import com.pro.tameit.dto.DoctorJobTitle;
+import com.pro.tameit.domain.DoctorJobTitle;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.List;
-import com.pro.tameit.dto.EGender;
+import com.pro.tameit.domain.EGender;
 
 import jakarta.persistence.*;
 

@@ -1,6 +1,6 @@
 package com.pro.tameit.dto.response;
 
-import com.pro.tameit.dto.EGender;
+import com.pro.tameit.domain.EGender;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

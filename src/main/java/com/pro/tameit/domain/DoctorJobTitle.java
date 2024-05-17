@@ -1,4 +1,4 @@
-package com.pro.tameit.dto;
+package com.pro.tameit.domain;
 
 public enum DoctorJobTitle {
     PSYCHIATRIST,

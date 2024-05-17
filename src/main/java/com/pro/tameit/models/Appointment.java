@@ -1,6 +1,6 @@
 package com.pro.tameit.models;
 
-import com.pro.tameit.dto.EAppointmentStatus;
+import com.pro.tameit.domain.EAppointmentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

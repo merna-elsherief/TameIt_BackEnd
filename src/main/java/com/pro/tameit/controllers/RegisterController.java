@@ -1,6 +1,7 @@
 package com.pro.tameit.controllers;
 import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.services.AuthenticationService;
+import com.pro.tameit.services.UserService;
 import com.pro.tameit.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 public class RegisterController {
 
     private final AuthenticationService service;
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
 
     @PostMapping("/auth/register")

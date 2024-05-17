@@ -2,6 +2,7 @@ package com.pro.tameit.controllers;
 
 import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
+import com.pro.tameit.services.UserService;
 import com.pro.tameit.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl service;
+    private final UserService service;
     private final ImageService imageService;
     @GetMapping("/details")
     public ResponseEntity<?> details() {
