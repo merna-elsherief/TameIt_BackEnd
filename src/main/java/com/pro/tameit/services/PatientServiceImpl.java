@@ -6,6 +6,7 @@ import com.pro.tameit.models.Patient;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.PatientRepository;
 import com.pro.tameit.repo.UserRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +67,12 @@ public class PatientServiceImpl implements PatientService{
         patientResponse.setBirthDate(dateFormatter.format(patient.getBirthDate()));
         patientResponse.setGender(patient.getGender());
         return patientResponse;
+    }
+    @Override
+    public List<String> getAll() {
+        List<Patient> patients = patientRepository.findAll();
+        return patients.stream()
+                .map(Patient::getFirstName)
+                .collect(Collectors.toList());
     }
 }
