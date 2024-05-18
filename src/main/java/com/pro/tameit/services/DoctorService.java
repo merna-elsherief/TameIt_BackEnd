@@ -8,4 +8,6 @@ public interface DoctorService {
     List<String> searchDoctors(String searchTerm);
 
     List<String> sortDoctors(String order);
+
+    String addDoctor(String order);
 }

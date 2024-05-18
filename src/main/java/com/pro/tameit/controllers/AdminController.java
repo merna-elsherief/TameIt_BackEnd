@@ -37,6 +37,7 @@ public class AdminController {
     }
 
     //add doctor
+
     //request user password 123
     // chek specialization there exit or not if not we need add specialization
     // chek clinic there exit or not if not we need to add clinic

@@ -1,4 +1,5 @@
 package com.pro.tameit.controllers;
+import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.services.AuthenticationService;
 import com.pro.tameit.services.UserService;
@@ -43,7 +44,7 @@ public class RegisterController {
                 return ResponseEntity.badRequest().body(errors);
             }
 
-            return ResponseEntity.ok(service.register(request));
+            return ResponseEntity.ok(service.register(request, ERole.PATIENT));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
         }

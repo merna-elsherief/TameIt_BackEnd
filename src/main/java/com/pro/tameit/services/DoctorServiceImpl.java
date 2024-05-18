@@ -47,4 +47,8 @@ public class DoctorServiceImpl implements DoctorService {
             return List.of();
         }
     }
+    @Override
+    public String addDoctor(String order) {
+        return "";
+    }
 }

@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         detailsResponse.setUserName(user.getUsername());
         detailsResponse.setEmail(user.getEmail());
         if (user.getImage() == null){
-            detailsResponse.setImageUrl("https://res-console.cloudinary.com/dhta0azvx/thumbnails/v1/image/upload/v1714768348/Zm9sZGVyXzEvaGZpcmVzeWxyNnlpcWJtcnBnajg=/preview");
+            detailsResponse.setImageUrl(null);
         }else {
             detailsResponse.setImageUrl(user.getImage().getUrl());
         }
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
         if (doctor.getUser().getImage() != null){
             doctorCardResponse.setImageUrl(doctor.getUser().getImage().getUrl());
         }else {
-            doctorCardResponse.setImageUrl("https://res-console.cloudinary.com/dhta0azvx/thumbnails/v1/image/upload/v1714768348/Zm9sZGVyXzEvaGZpcmVzeWxyNnlpcWJtcnBnajg=/preview");
+            doctorCardResponse.setImageUrl(null);
         }
         doctorCardResponse.setSpecializations(doctor.getSpecializations());
         doctorCardResponse.setJobTitle(doctor.getJobTitle());
