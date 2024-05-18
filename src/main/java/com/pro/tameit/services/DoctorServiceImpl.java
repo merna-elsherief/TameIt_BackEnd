@@ -1,5 +1,7 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.domain.ERole;
+import com.pro.tameit.dto.request.DoctorRequest;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.repo.DoctorRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
+    private final AuthenticationService authenticationService;
 
     @Override
     public List<String> getAll() {
@@ -48,7 +51,8 @@ public class DoctorServiceImpl implements DoctorService {
         }
     }
     @Override
-    public String addDoctor(String order) {
+    public String addDoctor(DoctorRequest doctorRequest) {
+        authenticationService.register(doctorRequest.getRegisterRequest(), ERole.DOCTOR);
         return "";
     }
 }

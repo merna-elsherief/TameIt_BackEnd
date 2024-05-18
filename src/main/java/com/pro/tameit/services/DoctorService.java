@@ -1,5 +1,7 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.dto.request.DoctorRequest;
+
 import java.util.List;
 
 public interface DoctorService {
@@ -9,5 +11,5 @@ public interface DoctorService {
 
     List<String> sortDoctors(String order);
 
-    String addDoctor(String order);
+    String addDoctor(DoctorRequest doctorRequest);
 }

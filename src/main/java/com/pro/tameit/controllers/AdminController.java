@@ -1,5 +1,6 @@
 package com.pro.tameit.controllers;
 
+import com.pro.tameit.dto.request.DoctorRequest;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.services.DoctorService;
 import com.pro.tameit.services.PatientService;
@@ -7,10 +8,7 @@ import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -42,6 +40,11 @@ public class AdminController {
     // chek specialization there exit or not if not we need add specialization
     // chek clinic there exit or not if not we need to add clinic
 
+    @PostMapping
+    public ResponseEntity<?> addDoctor(@RequestBody DoctorRequest doctorRequest){
+        doctorService.addDoctor(doctorRequest);
+        return new ResponseEntity<>("",HttpStatus.OK);
+    }
 
     //update doctor
 
