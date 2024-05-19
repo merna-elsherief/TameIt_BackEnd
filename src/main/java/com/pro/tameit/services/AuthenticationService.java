@@ -31,6 +31,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailSenderService emailSenderService;
+    private final String DOCTOR_DEFAULT_PASSWORD="123456789";
     public AuthenticationResponse register(RegisterRequest request, ERole eRole){
         String token = generateToken();
         User user = new User();
@@ -55,7 +56,7 @@ public class AuthenticationService {
                     .userName(request.getUserName())
                     .email(request.getEmail())
                     //Default Password For Doctor Which can be changed later
-                    .password(passwordEncoder.encode("123456789"))
+                    .password(passwordEncoder.encode(DOCTOR_DEFAULT_PASSWORD))
                     .verificationToken(token)
                     //Because he is registering
                     .role(eRole)
@@ -71,6 +72,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(eRole)
                 .build();
     }
     public AuthenticationResponse authenticate(AuthenticationRequest request){
@@ -85,6 +87,7 @@ public class AuthenticationService {
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .role(user.getRole())
                 .build();
     }
     //not best practice

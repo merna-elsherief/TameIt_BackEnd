@@ -2,8 +2,10 @@ package com.pro.tameit.services;
 
 import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.request.DoctorRequest;
+import com.pro.tameit.models.Clinic;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.models.Specialization;
+import com.pro.tameit.repo.ClinicRepository;
 import com.pro.tameit.repo.DoctorRepository;
 import com.pro.tameit.repo.SpecializationRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final AuthenticationService authenticationService;
     private final SpecializationRepository specializationRepository;
+    private final ClinicRepository clinicRepository;
     @Override
     public List<String> getAll() {
         List<Doctor> doctors = doctorRepository.findAll();
@@ -90,6 +93,22 @@ public class DoctorServiceImpl implements DoctorService {
                         doctor.setSpecializations(new ArrayList<>());
                     }
                     doctor.getSpecializations().add(returnedSpecialization);
+                }
+            }
+        }
+        //add l clinics b2a:
+        List<Clinic> doctorRequestClinics = doctorRequest.getClinics();
+        if (doctorRequestClinics!=null){
+            for (Clinic clinic:
+                 doctorRequestClinics) {
+                Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(clinic.getClinicName());
+                if (returnedClinic == null){
+                    Clinic clinicBuilder = Clinic.builder().clinicName(clinic.getClinicName()).address(clinic.getAddress()).phoneNumber(clinic.getPhoneNumber()).build();
+                    clinicRepository.save(clinicBuilder);
+                    if (doctor.getClinics()==null){
+                        doctor.setClinics(new ArrayList<>());
+                    }
+                    doctor.getClinics().add(clinicBuilder);
                 }
             }
         }

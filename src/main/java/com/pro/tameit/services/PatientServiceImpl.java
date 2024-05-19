@@ -38,7 +38,7 @@ public class PatientServiceImpl implements PatientService{
         patient.setCountry(request.getCountry());
         //patient.setGender(request.getGender());
         //edit of BirthDate need more actions
-        SimpleDateFormat dateParser = new SimpleDateFormat ("dd/MM/yyyy"); //Format for input
+        SimpleDateFormat dateParser = new SimpleDateFormat ("dd-MM-yyyy"); //Format for input
         String date = request.getBirthDate();
         Date dn = dateParser.parse(date); //Parsing the date
 

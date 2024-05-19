@@ -26,5 +26,5 @@ public class DoctorRequest {
     private EGender gender;
     private RegisterRequest registerRequest;
     private List<String> specializations;
-    private List<String> clinics;
+    private List<Clinic> clinics;
 }
