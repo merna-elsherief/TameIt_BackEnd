@@ -33,16 +33,17 @@ public class AuthenticationService {
     private final EmailSenderService emailSenderService;
     public AuthenticationResponse register(RegisterRequest request, ERole eRole){
         String token = generateToken();
-        User user = User.builder()
-                .userName(request.getUserName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .verificationToken(token)
-                //Because he is registering
-                .role(eRole)
-                .build();
-        userRepository.save(user);
+        User user = new User();
         if (eRole == ERole.PATIENT) {
+            user = User.builder()
+                    .userName(request.getUserName())
+                    .email(request.getEmail())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .verificationToken(token)
+                    //Because he is registering
+                    .role(eRole)
+                    .build();
+            userRepository.save(user);
             //Add User to Patient DB
             Patient patient = Patient.builder()
                     .user(user)
@@ -50,6 +51,16 @@ public class AuthenticationService {
             patientRepository.save(patient);
             sendVerificationEmail(user);
         } else if (eRole == ERole.DOCTOR) {
+            user = User.builder()
+                    .userName(request.getUserName())
+                    .email(request.getEmail())
+                    //Default Password For Doctor Which can be changed later
+                    .password(passwordEncoder.encode("123456789"))
+                    .verificationToken(token)
+                    //Because he is registering
+                    .role(eRole)
+                    .build();
+            userRepository.save(user);
             //Add User to Doctor DB
             Doctor doctor = Doctor.builder()
                     .user(user)

@@ -52,7 +52,19 @@ public class DoctorServiceImpl implements DoctorService {
     }
     @Override
     public String addDoctor(DoctorRequest doctorRequest) {
+        //add Doctor To USER DB & DOCTOR DB
         authenticationService.register(doctorRequest.getRegisterRequest(), ERole.DOCTOR);
+        //add Doctor details:
+        //first get l doctor with the userName
+        Doctor doctor = doctorRepository.findByUserName(doctorRequest.getRegisterRequest().getUserName()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        //Then add doctor details:
+        doctor.setFirstName(doctorRequest.getFirstName());
+        doctor.setLastName(doctorRequest.getLastName());
+        doctor.setPhoneNumber(doctorRequest.getPhoneNumber());
+        doctor.setPrice(doctorRequest.getPrice());
+        doctor.setYearsOfExperience(doctorRequest.getYearsOfExperience());
+        doctor.setJobTitle(doctorRequest.getJobTitle());
+        doctorRepository.save(doctor);
         return "";
     }
 }

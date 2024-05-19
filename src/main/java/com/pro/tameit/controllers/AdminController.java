@@ -21,17 +21,23 @@ public class AdminController {
     private final PatientService patientService;
 
     //get all doctors
-    @GetMapping("/doctors")
+    @GetMapping("/getAllDoctors")
     public ResponseEntity<?> getAllDoctors(){
-        List<String> doctorList = doctorService.getAll();
-        return new ResponseEntity<>(doctorList, HttpStatus.OK);
+        try {
+            return ResponseEntity.ok(doctorService.getAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     //get all users
-    @GetMapping("/patients")
+    @GetMapping("/getAllPatients")
     public ResponseEntity<?> getAllPatient(){
-        List<String> patientList = patientService.getAll();
-        return new ResponseEntity<>(patientList, HttpStatus.OK);
+        try {
+            return ResponseEntity.ok(patientService.getAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     //add doctor
