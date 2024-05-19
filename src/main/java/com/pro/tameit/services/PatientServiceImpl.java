@@ -31,20 +31,33 @@ public class PatientServiceImpl implements PatientService{
         //Second get the patient
         Patient patient = patientRepository.findByUserId(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         //Last h n edit om l patient b2a
-        patient.setFirstName(request.getFirstName());
-        patient.setLastName(request.getLastName());
-        patient.setPhoneNumber(request.getPhoneNumber());
-        patient.setCity(request.getCity());
-        patient.setCountry(request.getCountry());
-        //patient.setGender(request.getGender());
-        //edit of BirthDate need more actions
-        SimpleDateFormat dateParser = new SimpleDateFormat ("dd-MM-yyyy"); //Format for input
-        String date = request.getBirthDate();
-        Date dn = dateParser.parse(date); //Parsing the date
+        if (request.getFirstName()!=null){
+            patient.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName()!=null){
+            patient.setLastName(request.getLastName());
+        }
+        if (request.getPhoneNumber()!=null){
+            patient.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getCity()!=null){
+            patient.setCity(request.getCity());
+        }
+        if (request.getCountry()!=null){
+            patient.setCountry(request.getCountry());
+        }
+        if (request.getGender()!=null){
+            patient.setGender(request.getGender());
+        }
+        if (request.getBirthDate()!=null){//edit of BirthDate need more actions
+            SimpleDateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy"); //Format for input
+            String date = request.getBirthDate();
+            Date dn = dateParser.parse(date); //Parsing the date
 
-         //Format for output
+            //Format for output
 
-        patient.setBirthDate(dn);
+            patient.setBirthDate(dn);
+        }
         patientRepository.save(patient);
         return patient;
     }

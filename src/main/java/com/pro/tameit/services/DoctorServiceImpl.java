@@ -34,8 +34,8 @@ public class DoctorServiceImpl implements DoctorService {
     public List<String> searchDoctors(String searchTerm) {
         List<Doctor> doctors = doctorRepository.findAll();
         return doctors.stream()
-                .filter(doctor -> doctor.getFirstName().contains(searchTerm))
                 .map(Doctor::getFirstName)
+                .filter(firstName -> firstName.contains(searchTerm))
                 .collect(Collectors.toList());
     }
     @Override
