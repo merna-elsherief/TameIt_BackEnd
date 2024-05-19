@@ -1,10 +1,15 @@
 package com.pro.tameit.dto.request;
 
 import com.pro.tameit.domain.DoctorJobTitle;
+import com.pro.tameit.domain.EGender;
+import com.pro.tameit.models.Clinic;
+import com.pro.tameit.models.Specialization;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -18,6 +23,8 @@ public class DoctorRequest {
     private Integer price;
     private Integer yearsOfExperience;
     private DoctorJobTitle jobTitle;
-
+    private EGender gender;
     private RegisterRequest registerRequest;
+    private List<String> specializations;
+    private List<String> clinics;
 }

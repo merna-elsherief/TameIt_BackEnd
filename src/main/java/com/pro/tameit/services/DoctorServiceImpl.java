@@ -3,9 +3,13 @@ package com.pro.tameit.services;
 import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.request.DoctorRequest;
 import com.pro.tameit.models.Doctor;
+import com.pro.tameit.models.Specialization;
 import com.pro.tameit.repo.DoctorRepository;
+import com.pro.tameit.repo.SpecializationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,7 +19,7 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
     private final DoctorRepository doctorRepository;
     private final AuthenticationService authenticationService;
-
+    private final SpecializationRepository specializationRepository;
     @Override
     public List<String> getAll() {
         List<Doctor> doctors = doctorRepository.findAll();
@@ -64,6 +68,31 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setPrice(doctorRequest.getPrice());
         doctor.setYearsOfExperience(doctorRequest.getYearsOfExperience());
         doctor.setJobTitle(doctorRequest.getJobTitle());
+        doctor.setGender(doctorRequest.getGender());
+        //Specialization:
+        //check If specialization exist or not:
+        List<String> doctorRequestSpecializations = doctorRequest.getSpecializations();
+        if (doctorRequestSpecializations!=null){
+            for (String specializationName:
+                 doctorRequestSpecializations) {
+                Specialization returnedSpecialization = specializationRepository.findBySpecializationName(specializationName);
+                if (returnedSpecialization == null){
+                    //h n addoh b2a
+                    //h n check if ana asln 3ndy fe specilizations ll doctor da wla l2a:
+                    Specialization specialization = Specialization.builder().specializationName(specializationName).build();
+                    specializationRepository.save(specialization);
+                    if (doctor.getSpecializations()==null){
+                        doctor.setSpecializations(new ArrayList<>());
+                    }
+                    doctor.getSpecializations().add(specialization);
+                }else {
+                    if (doctor.getSpecializations()==null){
+                        doctor.setSpecializations(new ArrayList<>());
+                    }
+                    doctor.getSpecializations().add(returnedSpecialization);
+                }
+            }
+        }
         doctorRepository.save(doctor);
         return "";
     }
