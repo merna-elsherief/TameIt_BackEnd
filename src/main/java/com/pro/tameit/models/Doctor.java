@@ -43,7 +43,7 @@ public class Doctor {
             joinColumns = {@JoinColumn(name = "doctor_id")},
             inverseJoinColumns = {@JoinColumn(name = "clinic_id")}
     )
-    private List<Clinic> clinics = new ArrayList<>();;
+    private List<Clinic> clinics = new ArrayList<>();
 
     @Column(nullable = true)
     private String firstName;
@@ -66,4 +66,6 @@ public class Doctor {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private DoctorJobTitle jobTitle;
+
+    private String about;
 }

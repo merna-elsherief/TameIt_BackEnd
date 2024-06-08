@@ -16,12 +16,7 @@ public class ClinicServiceImpl implements ClinicService{
     @Override
     public List<ClinicDTO> getAll() {
         return clinicRepository.findAll().stream()
-                .map(clinic -> {
-                    ClinicDTO dto = new ClinicDTO();
-                    dto.setClinicName(clinic.getClinicName());
-                    dto.setAddress(clinic.getAddress());
-                    return dto;
-                })
+                .map(this::mapToClinicDTO)
                 .collect(Collectors.toList());
     }
 
@@ -33,5 +28,18 @@ public class ClinicServiceImpl implements ClinicService{
             clinicRepository.save(clinicBuilder);
         }
         return clinicDTO;
+    }
+    @Override
+    public void deleteClinic(Long id) {
+        clinicRepository.deleteById(id);
+    }
+
+    @Override
+    public ClinicDTO mapToClinicDTO(Clinic clinic){
+        ClinicDTO dto = new ClinicDTO();
+        dto.setClinicName(clinic.getClinicName());
+        dto.setAddress(clinic.getAddress());
+        dto.setPhoneNumber(clinic.getPhoneNumber());
+        return dto;
     }
 }

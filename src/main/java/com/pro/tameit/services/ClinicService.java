@@ -9,4 +9,8 @@ public interface ClinicService {
     List<ClinicDTO> getAll();
 
     ClinicDTO addClinic(ClinicDTO clinicDTO);
+
+    void deleteClinic(Long id);
+
+    ClinicDTO mapToClinicDTO(Clinic clinic);
 }

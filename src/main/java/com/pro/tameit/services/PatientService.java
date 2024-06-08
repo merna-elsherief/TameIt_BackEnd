@@ -13,4 +13,6 @@ public interface PatientService {
     PatientResponse getPatientDetails();
 
     List<String> getAll();
+
+    void deletePatient(Long id);
 }

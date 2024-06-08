@@ -6,7 +6,6 @@ import com.pro.tameit.models.Patient;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.PatientRepository;
 import com.pro.tameit.repo.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService{
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
+    private final AppointmentService appointmentService;
     @Override
     public Patient editPatient(PatientRequest request) throws ParseException {
         //First get the user from our SecurityContextHolder
@@ -87,5 +87,12 @@ public class PatientServiceImpl implements PatientService{
         return patients.stream()
                 .map(Patient::getFirstName)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public void deletePatient(Long id){
+        Patient patient = patientRepository.findUserBPatientId(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        appointmentService.deletePatientFromAppointmentsById(id);
+        userRepository.deleteById(patient.getUser().getId());
+        patientRepository.deleteById(id);
     }
 }

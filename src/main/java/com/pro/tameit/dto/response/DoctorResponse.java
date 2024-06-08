@@ -1,14 +1,13 @@
-package com.pro.tameit.dto.request;
+package com.pro.tameit.dto.response;
 
 import com.pro.tameit.domain.DoctorJobTitle;
 import com.pro.tameit.domain.EGender;
+import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.models.Clinic;
-import com.pro.tameit.models.Specialization;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,8 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DoctorRequest {
-
+public class DoctorResponse {
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -25,7 +23,6 @@ public class DoctorRequest {
     private Integer yearsOfExperience;
     private DoctorJobTitle jobTitle;
     private EGender gender;
-    private RegisterRequest registerRequest;
     private List<String> specializations;
     private List<Clinic> clinics;
     private String about;

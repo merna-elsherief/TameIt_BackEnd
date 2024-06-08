@@ -12,7 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-
+    Optional<Patient> findPatientById(Long id);
+    @Query("select p from Patient p where p.id = ?1")
+    Optional<Patient> findUserBPatientId(Long id);
     Optional<List<Patient>> findByFirstName(String firstName);
     @Query("select p from Patient p where p.user.userName = ?1")
     Optional<Patient> findByUserId(String userName);

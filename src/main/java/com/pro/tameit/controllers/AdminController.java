@@ -3,6 +3,7 @@ package com.pro.tameit.controllers;
 import com.pro.tameit.dto.ClinicDTO;
 import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.DoctorRequest;
+import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.services.*;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +22,12 @@ public class AdminController {
     private final PatientService patientService;
     private final ClinicService clinicService;
     private final SpecializationService specializationService;
-    //get all doctors
-    @GetMapping("/getAllDoctors")
-    public ResponseEntity<?> getAllDoctors(){
-        try {
-            return ResponseEntity.ok(doctorService.getAll());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-    }
 
-    //get all users
+    //get all patients
     @GetMapping("/getAllPatients")
     public ResponseEntity<?> getAllPatients(){
         try {
-            return ResponseEntity.ok(patientService.getAll());
+            return new ResponseEntity<>(patientService.getAll(),HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -74,9 +66,22 @@ public class AdminController {
         return new ResponseEntity<>(clinicService.addClinic(clinicDTO),HttpStatus.CREATED);
     }
     //update doctor
-
+    @PatchMapping("/editDoctor/{id}")
+    public ResponseEntity<?> editDoctor(@PathVariable Long id, @RequestBody DoctorRequest doctorRequest){
+        return new ResponseEntity<>(doctorService.updateDoctor(id, doctorRequest),HttpStatus.OK);
+    }
     //delete doctor
+    @DeleteMapping("/deleteDoctor/{id}")
+    public ResponseEntity<Void> deleteDoctor(@PathVariable Long id){
+        doctorService.deleteDoctorById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    //delete patient
+    @DeleteMapping("/deletePatient/{id}")
+    public ResponseEntity<Void> deletePatient(@PathVariable Long id){
+        patientService.deletePatient(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
-    //delete user
 
 }
