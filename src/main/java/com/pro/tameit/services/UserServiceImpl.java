@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final DoctorRepository doctorRepository;
+    private final DoctorService doctorService;
 
     @Override
     public DetailsResponse details(){
@@ -47,20 +48,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserName(userName)
                 .orElseThrow();
         Doctor doctor = doctorRepository.findByUserId(user.getId()).orElseThrow();
-        DoctorCardResponse doctorCardResponse = new DoctorCardResponse();
-        doctorCardResponse.setPrice(doctor.getPrice());
-        doctorCardResponse.setPhoneNumber(doctor.getPhoneNumber());
-        doctorCardResponse.setFirstName(doctor.getFirstName());
-        doctorCardResponse.setLastName(doctor.getLastName());
-        doctorCardResponse.setRating(doctor.getRating());
-        if (doctor.getUser().getImage() != null){
-            doctorCardResponse.setImageUrl(doctor.getUser().getImage().getUrl());
-        }else {
-            doctorCardResponse.setImageUrl("https://res-console.cloudinary.com/dhta0azvx/thumbnails/v1/image/upload/v1714768348/Zm9sZGVyXzEvaGZpcmVzeWxyNnlpcWJtcnBnajg=/preview");
-        }
-        doctorCardResponse.setSpecializations(doctor.getSpecializations());
-        doctorCardResponse.setJobTitle(doctor.getJobTitle());
-        doctorCardResponse.setYearsOfExperience(doctor.getYearsOfExperience());
-        return doctorCardResponse;
+        return doctorService.mapToDoctorCardResponse(doctor);
+    }
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
     }
 }

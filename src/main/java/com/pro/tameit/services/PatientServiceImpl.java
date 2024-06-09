@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ import java.util.Date;
 public class PatientServiceImpl implements PatientService{
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
+    private final AppointmentService appointmentService;
     @Override
     public Patient editPatient(PatientRequest request) throws ParseException {
         //First get the user from our SecurityContextHolder
@@ -28,20 +31,33 @@ public class PatientServiceImpl implements PatientService{
         //Second get the patient
         Patient patient = patientRepository.findByUserId(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         //Last h n edit om l patient b2a
-        patient.setFirstName(request.getFirstName());
-        patient.setLastName(request.getLastName());
-        patient.setPhoneNumber(request.getPhoneNumber());
-        patient.setCity(request.getCity());
-        patient.setCountry(request.getCountry());
-        patient.setGender(request.getGender());
-        //edit of BirthDate need more actions
-        SimpleDateFormat dateParser = new SimpleDateFormat ("dd/MM/yyyy"); //Format for input
-        String date = request.getBirthDate();
-        Date dn = dateParser.parse(date); //Parsing the date
+        if (request.getFirstName()!=null){
+            patient.setFirstName(request.getFirstName());
+        }
+        if (request.getLastName()!=null){
+            patient.setLastName(request.getLastName());
+        }
+        if (request.getPhoneNumber()!=null){
+            patient.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getCity()!=null){
+            patient.setCity(request.getCity());
+        }
+        if (request.getCountry()!=null){
+            patient.setCountry(request.getCountry());
+        }
+        if (request.getGender()!=null){
+            patient.setGender(request.getGender());
+        }
+        if (request.getBirthDate()!=null){//edit of BirthDate need more actions
+            SimpleDateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy"); //Format for input
+            String date = request.getBirthDate();
+            Date dn = dateParser.parse(date); //Parsing the date
 
-         //Format for output
+            //Format for output
 
-        patient.setBirthDate(dn);
+            patient.setBirthDate(dn);
+        }
         patientRepository.save(patient);
         return patient;
     }
@@ -64,5 +80,19 @@ public class PatientServiceImpl implements PatientService{
         patientResponse.setBirthDate(dateFormatter.format(patient.getBirthDate()));
         patientResponse.setGender(patient.getGender());
         return patientResponse;
+    }
+    @Override
+    public List<String> getAll() {
+        List<Patient> patients = patientRepository.findAll();
+        return patients.stream()
+                .map(Patient::getFirstName)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public void deletePatient(Long id){
+        Patient patient = patientRepository.findUserBPatientId(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        appointmentService.deletePatientFromAppointmentsById(id);
+        userRepository.deleteById(patient.getUser().getId());
+        patientRepository.deleteById(id);
     }
 }

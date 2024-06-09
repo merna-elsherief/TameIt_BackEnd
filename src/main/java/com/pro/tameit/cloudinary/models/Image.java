@@ -20,7 +20,7 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_image")
+    @Column(name = "name_image", unique = false)
     private String name;
 
     @Column(name = "url_image")

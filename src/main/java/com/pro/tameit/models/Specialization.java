@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -20,4 +22,7 @@ public class Specialization {
 
     @Column(nullable = false, unique = true)
     private String specializationName;
+
+    @ManyToMany(mappedBy = "specializations")
+    private List<Doctor> doctors;
 }

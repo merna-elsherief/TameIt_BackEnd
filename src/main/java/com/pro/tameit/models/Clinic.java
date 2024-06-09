@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,9 +23,12 @@ public class Clinic {
     @Column(nullable = false, unique = true)
     private String clinicName;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false,unique = false)
     private String address;
 
     @Column(nullable = false,unique = true)
     private String phoneNumber;
+
+    @ManyToMany(mappedBy = "clinics")
+    private List<Doctor> doctors;
 }

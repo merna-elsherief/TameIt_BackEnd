@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.pro.tameit.domain.EGender;
 
@@ -34,14 +36,14 @@ public class Doctor {
             joinColumns = {@JoinColumn(name = "doctor_id")},
             inverseJoinColumns = {@JoinColumn(name = "specialization_id")}
     )
-    private List<Specialization> specializations;
+    private List<Specialization> specializations = new ArrayList<>();;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "doctor_clinic",
             joinColumns = {@JoinColumn(name = "doctor_id")},
             inverseJoinColumns = {@JoinColumn(name = "clinic_id")}
     )
-    private List<Clinic> clinics;
+    private List<Clinic> clinics = new ArrayList<>();
 
     @Column(nullable = true)
     private String firstName;
@@ -64,4 +66,6 @@ public class Doctor {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private DoctorJobTitle jobTitle;
+
+    private String about;
 }

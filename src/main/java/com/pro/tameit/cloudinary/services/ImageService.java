@@ -10,4 +10,6 @@ public interface ImageService {
     ResponseEntity<?> uploadImage(ImageModel imageModel);
 
     ResponseEntity<Map> changeUserImage(ImageModel imageModel);
+
+    ResponseEntity<Map> changeUserImageByDoctorId(Long id, ImageModel imageModel);
 }
