@@ -38,7 +38,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
     @Override
     public List<DoctorCardResponse> searchDoctors(String query) {
-        List<Doctor> doctors = doctorRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(query, query);
+        List<Doctor> doctors = doctorRepository.findDoctorByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(query, query);
         return doctors.stream()
                 .map(this::mapToDoctorCardResponse)
                 .collect(Collectors.toList());

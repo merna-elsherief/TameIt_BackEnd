@@ -15,7 +15,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     List<Doctor> findAll(Specification<Doctor> spec);
 
-    List<Doctor> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
+    List<Doctor> findDoctorByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(String firstName, String lastName);
     Optional<List<Doctor>> findByFirstName(String firstName);
     @Query("select d from Doctor d where d.user.id = ?1")
     Optional<Doctor> findByUserId(Long userId);
