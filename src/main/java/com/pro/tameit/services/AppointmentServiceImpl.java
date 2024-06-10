@@ -7,6 +7,7 @@ import com.pro.tameit.dto.response.AppointmentDTOResponse;
 import com.pro.tameit.models.*;
 import com.pro.tameit.repo.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,9 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppointmentServiceImpl implements AppointmentService{
@@ -91,7 +94,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return new AppointmentDTOResponse(appointment.getId(),doctor, null, appointment.getClinic(), appointment.getAppointmentDateTime(), EAppointmentStatus.AVAILABLE, appointment.getFees());
     }
     @Override
-    public AppointmentDTOResponse updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest){
+    public AppointmentDetailsDTO updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest){
         //hngeeb l appointment
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         if (appointmentDTORequest.getDoctor()!=null){
@@ -136,7 +139,8 @@ public class AppointmentServiceImpl implements AppointmentService{
             appointment.setFees(appointmentDTORequest.getFees());
         }
         appointmentRepository.save(appointment);
-        return new AppointmentDTOResponse(appointment.getId(),appointment.getDoctor(), appointment.getPatient(), appointment.getClinic(), appointment.getAppointmentDateTime(), appointment.getStatus(), appointment.getFees());
+
+        return mapToAppointmentDetailsDTO(appointment);
     }
     @Override
     public boolean deleteAppointmentById(Long id) {
@@ -147,7 +151,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return false;
     }
     @Override
-    public AppointmentDTOResponse book(Long id){
+    public AppointmentDetailsDTO book(Long id){
         //hngeeb l appointment
         Appointment appointment = appointmentRepository.findById(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         //hngeeb l patient:
@@ -156,7 +160,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setPatient(patient);
         appointment.setStatus(EAppointmentStatus.BOOKED);
         appointmentRepository.save(appointment);
-        return new AppointmentDTOResponse(appointment.getId(),appointment.getDoctor(), appointment.getPatient(), appointment.getClinic(), appointment.getAppointmentDateTime(), appointment.getStatus(), appointment.getFees());
+        return mapToAppointmentDetailsDTO(appointment);
     }
 
     //Admin & Patient UI
@@ -166,21 +170,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         List<AppointmentDetailsDTO> returnedAppointments = new ArrayList<>();
         for (Appointment appointment:
              appointments) {
-            returnedAppointments.add(new AppointmentDetailsDTO(appointment.getDoctor().getFirstName()
-                    , appointment.getDoctor().getLastName()
-                    , appointment.getPatient().getFirstName()
-                    , appointment.getPatient().getLastName()
-                    ,appointment.getClinic().getClinicName()
-                    ,appointment.getClinic().getAddress()
-                    ,appointment.getAppointmentDateTime().getDayOfMonth()
-                    ,appointment.getAppointmentDateTime().getDayOfWeek().name()
-                    , appointment.getAppointmentDateTime().getMonthValue()
-                    , appointment.getAppointmentDateTime().getMonth().name()
-                    ,appointment.getAppointmentDateTime().getYear()
-                    ,appointment.getAppointmentDateTime().getHour()
-                    ,appointment.getAppointmentDateTime().getMinute()
-                    ,appointment.getStatus()
-                    ,appointment.getFees()));
+            returnedAppointments.add(mapToAppointmentDetailsDTO(appointment));
         }
         return returnedAppointments;
     }
@@ -210,21 +200,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         List<AppointmentDetailsDTO> returnedAppointments = new ArrayList<>();
         for (Appointment appointment:
                 appointments) {
-            returnedAppointments.add(new AppointmentDetailsDTO(appointment.getDoctor().getFirstName()
-                    , appointment.getDoctor().getLastName()
-                    , appointment.getPatient().getFirstName()
-                    , appointment.getPatient().getLastName()
-                    ,appointment.getClinic().getClinicName()
-                    ,appointment.getClinic().getAddress()
-                    ,appointment.getAppointmentDateTime().getDayOfMonth()
-                    ,appointment.getAppointmentDateTime().getDayOfWeek().name()
-                    , appointment.getAppointmentDateTime().getMonthValue()
-                    , appointment.getAppointmentDateTime().getMonth().name()
-                    ,appointment.getAppointmentDateTime().getYear()
-                    ,appointment.getAppointmentDateTime().getHour()
-                    ,appointment.getAppointmentDateTime().getMinute()
-                    ,appointment.getStatus()
-                    ,appointment.getFees()));
+            returnedAppointments.add(mapToAppointmentDetailsDTO(appointment));
         }
         return returnedAppointments;
     }
@@ -261,5 +237,39 @@ public class AppointmentServiceImpl implements AppointmentService{
             // Log the exception here
             return false;
         }
+    }
+    @Override
+    public AppointmentDetailsDTO mapToAppointmentDetailsDTO(Appointment appointment) {
+        AppointmentDetailsDTO appointmentDetailsDTO = new AppointmentDetailsDTO();
+        appointmentDetailsDTO.setDoctorFName(appointment.getDoctor().getFirstName());
+        appointmentDetailsDTO.setDoctorLName(appointment.getDoctor().getLastName());
+
+        if (appointment.getPatient() != null && appointment.getPatient().getFirstName() != null
+                && appointment.getPatient().getLastName() != null) {
+            appointmentDetailsDTO.setPatientFName(appointment.getPatient().getFirstName());
+            appointmentDetailsDTO.setPatientLName(appointment.getPatient().getLastName());
+        } else {
+            appointmentDetailsDTO.setPatientFName(null);
+            appointmentDetailsDTO.setPatientLName(null);
+        }
+
+        appointmentDetailsDTO.setClinicName(appointment.getClinic().getClinicName());
+        appointmentDetailsDTO.setClinicAddress(appointment.getClinic().getAddress());
+        appointmentDetailsDTO.setClinicPhoneNumber(appointment.getClinic().getPhoneNumber());
+
+        appointmentDetailsDTO.setDayOfMonth(appointment.getAppointmentDateTime().getDayOfMonth());
+        appointmentDetailsDTO.setDayOfWeek(appointment.getAppointmentDateTime().getDayOfWeek().name());
+
+        appointmentDetailsDTO.setMonthOfYear(appointment.getAppointmentDateTime().getMonthValue());
+        appointmentDetailsDTO.setMonthNameYear(appointment.getAppointmentDateTime().getMonth().name());
+
+        appointmentDetailsDTO.setYear(appointment.getAppointmentDateTime().getYear());
+        appointmentDetailsDTO.setHours(appointment.getAppointmentDateTime().getHour());
+        appointmentDetailsDTO.setMinutes(appointment.getAppointmentDateTime().getMinute());
+
+        appointmentDetailsDTO.setStatus(appointment.getStatus());
+        appointmentDetailsDTO.setFees(appointment.getFees());
+
+        return appointmentDetailsDTO;
     }
 }

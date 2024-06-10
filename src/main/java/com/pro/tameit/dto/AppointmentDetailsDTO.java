@@ -20,10 +20,14 @@ import java.time.LocalDateTime;
 public class AppointmentDetailsDTO {
     private String doctorFName;
     private String doctorLName;
+
     private String patientFName;
     private String patientLName;
+
     private String clinicName;
     private String clinicAddress;
+    private String clinicPhoneNumber;
+
     //Date & Time
     //Date
     int dayOfMonth;

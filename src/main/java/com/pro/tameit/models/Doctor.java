@@ -74,6 +74,6 @@ public class Doctor {
 
     private String about;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
 }

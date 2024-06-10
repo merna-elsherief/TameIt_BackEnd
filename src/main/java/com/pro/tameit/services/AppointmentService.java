@@ -19,13 +19,13 @@ public interface AppointmentService {
 
     AppointmentDTOResponse createAppointment(AppointmentDTORequest appointmentDTORequest);
 
-    AppointmentDTOResponse updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest);
 
+    AppointmentDetailsDTO updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest);
 
     boolean deleteAppointmentById(Long id);
 
-    AppointmentDTOResponse book(Long id);
 
+    AppointmentDetailsDTO book(Long id);
 
     //Doctor UI
     List<AppointmentDetailsDTO> getDoctorAppointmentsById(Long id);
@@ -42,4 +42,6 @@ public interface AppointmentService {
     //IN Patient UI
     //Delete Appointment
     boolean deletePatientFromAppointmentsById(Long id);
+
+    AppointmentDetailsDTO mapToAppointmentDetailsDTO(Appointment appointment);
 }

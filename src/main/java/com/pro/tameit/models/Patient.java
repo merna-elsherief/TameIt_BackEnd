@@ -59,7 +59,7 @@ public class Patient {
     @Column(nullable = true)
     private Date birthDate;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Appointment> appointments;
 
 }
