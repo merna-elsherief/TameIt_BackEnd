@@ -1,5 +1,6 @@
 package com.pro.tameit.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pro.tameit.dto.ClinicDTO;
 import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.DoctorRequest;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -52,7 +54,16 @@ public class AdminController {
     }
     //Create Doctor with his Clinics and his Specialization
     @PostMapping("/addDoctor")
-    public ResponseEntity<?> addDoctor(@RequestBody DoctorRequest doctorRequest){
+    public ResponseEntity<?> addDoctor(@RequestParam("file") MultipartFile file,
+                                       @RequestParam("json") String jsonString){
+        ObjectMapper objectMapper = new ObjectMapper();
+        DoctorRequest doctorRequest;
+        try {
+            doctorRequest = objectMapper.readValue(jsonString, DoctorRequest.class);
+            doctorRequest.setFile(file);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid JSON");
+        }
         return new ResponseEntity<>(doctorService.addDoctor(doctorRequest),HttpStatus.CREATED);
     }
     //Create Specialization

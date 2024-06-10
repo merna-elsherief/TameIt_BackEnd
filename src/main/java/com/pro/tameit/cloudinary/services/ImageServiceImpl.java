@@ -49,14 +49,11 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ResponseEntity<Map> changeUserImage(ImageModel imageModel) {
         try {
-            if (imageModel.getFile().isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
+
             Image image = new Image();
-            if (imageModel.getName().isEmpty()) {
-                imageModel.setName("photo"+image.getId());
+            if (imageModel.getName()==null) {
+                image.setName("photo"+image.getId());
             }
-            image.setName(imageModel.getName());
             image.setUrl(cloudinaryService.uploadFile(imageModel.getFile(), "folder_1"));
             if(image.getUrl() == null) {
                 return ResponseEntity.badRequest().build();
@@ -78,14 +75,10 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ResponseEntity<Map> changeUserImageByDoctorId(Long id, ImageModel imageModel) {
         try {
-            if (imageModel.getFile().isEmpty()) {
-                return ResponseEntity.badRequest().build();
-            }
             Image image = new Image();
-            if (imageModel.getName().isEmpty()) {
-                imageModel.setName("photo"+image.getId());
+            if (imageModel.getName()==null) {
+                image.setName("photo"+image.getId());
             }
-            image.setName(imageModel.getName());
             image.setUrl(cloudinaryService.uploadFile(imageModel.getFile(), "folder_1"));
             if(image.getUrl() == null) {
                 return ResponseEntity.badRequest().build();

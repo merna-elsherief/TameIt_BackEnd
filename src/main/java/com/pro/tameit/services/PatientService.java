@@ -12,7 +12,8 @@ public interface PatientService {
 
     PatientResponse getPatientDetails();
 
-    List<String> getAll();
+
+    List<PatientResponse> getAll();
 
     void deletePatient(Long id);
 }

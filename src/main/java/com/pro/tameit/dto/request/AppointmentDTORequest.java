@@ -25,7 +25,8 @@ public class AppointmentDTORequest {
     private ClinicDTO clinic;
     @NotNull(message = "Appointment date cannot be null")
     @Future(message = "Appointment date must be in the future")
-    private LocalDateTime appointmentDateTime;
+    private String appointmentDate; // e.g., "2023-05-29"
+    private String appointmentTime;
     private EAppointmentStatus status;
     private BigDecimal fees;
 }

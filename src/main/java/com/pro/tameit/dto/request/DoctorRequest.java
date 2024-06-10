@@ -1,5 +1,6 @@
 package com.pro.tameit.dto.request;
 
+import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.domain.DoctorJobTitle;
 import com.pro.tameit.domain.EGender;
 import com.pro.tameit.models.Clinic;
@@ -22,6 +23,7 @@ public class DoctorRequest {
     private String lastName;
     private String phoneNumber;
     private Integer price;
+    private Integer rating;
     private Integer yearsOfExperience;
     private DoctorJobTitle jobTitle;
     private EGender gender;
@@ -29,4 +31,5 @@ public class DoctorRequest {
     private List<String> specializations;
     private List<Clinic> clinics;
     private String about;
+    private MultipartFile file;
 }

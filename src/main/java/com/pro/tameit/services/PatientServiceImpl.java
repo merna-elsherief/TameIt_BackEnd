@@ -1,9 +1,9 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.PatientRequest;
 import com.pro.tameit.dto.response.PatientResponse;
-import com.pro.tameit.models.Patient;
-import com.pro.tameit.models.User;
+import com.pro.tameit.models.*;
 import com.pro.tameit.repo.PatientRepository;
 import com.pro.tameit.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,29 +64,16 @@ public class PatientServiceImpl implements PatientService{
     }
     @Override
     public PatientResponse getPatientDetails(){
-        PatientResponse patientResponse = new PatientResponse();
         //First get the user from our SecurityContextHolder
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUserName(userName)
-                .orElseThrow();
         //Second get the patient
         Patient patient = patientRepository.findByUserId(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
-        patientResponse.setFirstName(patient.getFirstName());
-        patientResponse.setLastName(patient.getLastName());
-        patientResponse.setEmail(user.getEmail());
-        patientResponse.setPhoneNumber(patient.getPhoneNumber());
-        patientResponse.setCity(patient.getCity());
-        patientResponse.setCountry(patient.getCountry());
-        SimpleDateFormat dateFormatter = new SimpleDateFormat ("dd-MM-yyyy");
-        patientResponse.setBirthDate(dateFormatter.format(patient.getBirthDate()));
-        patientResponse.setGender(patient.getGender());
-        return patientResponse;
+        return mapToPatientResponse(patient);
     }
     @Override
-    public List<String> getAll() {
-        List<Patient> patients = patientRepository.findAll();
-        return patients.stream()
-                .map(Patient::getFirstName)
+    public List<PatientResponse> getAll() {
+        return patientRepository.findAll().stream()
+                .map(this::mapToPatientResponse)
                 .collect(Collectors.toList());
     }
     @Override
@@ -94,5 +82,26 @@ public class PatientServiceImpl implements PatientService{
         appointmentService.deletePatientFromAppointmentsById(id);
         userRepository.deleteById(patient.getUser().getId());
         patientRepository.deleteById(id);
+    }
+    public PatientResponse mapToPatientResponse(Patient patient) {
+        PatientResponse patientResponse = new PatientResponse();
+
+        patientResponse.setId(patient.getId());
+        patientResponse.setFirstName(patient.getFirstName());
+        patientResponse.setLastName(patient.getLastName());
+        patientResponse.setEmail(patient.getUser().getEmail());
+        // Handle the image URL, check if the image is not null
+        if (patient.getUser() != null && patient.getUser().getImage() != null) {
+            patientResponse.setImageUrl(patient.getUser().getImage().getUrl());
+        } else {
+            patientResponse.setImageUrl(null);
+        }
+        patientResponse.setPhoneNumber(patient.getPhoneNumber());
+        patientResponse.setCity(patient.getCity());
+        patientResponse.setCountry(patient.getCountry());
+        SimpleDateFormat dateFormatter = new SimpleDateFormat ("dd-MM-yyyy");
+        patientResponse.setBirthDate(dateFormatter.format(patient.getBirthDate()));
+        patientResponse.setGender(patient.getGender());
+        return patientResponse;
     }
 }

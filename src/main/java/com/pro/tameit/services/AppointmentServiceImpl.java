@@ -10,6 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +51,9 @@ public class AppointmentServiceImpl implements AppointmentService{
                 .orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         Doctor doctor = doctorRepository.findByUserId(user.getId()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         Appointment appointment = new Appointment();
+        //////////////////////////////////
         appointment.setDoctor(doctor);
+        /////////////////////////////////
         appointment.setFees(appointmentDTORequest.getFees());
         appointment.setStatus(EAppointmentStatus.AVAILABLE);
         //first hn4of l clinic 3ndna f l DB or not
@@ -58,10 +65,29 @@ public class AppointmentServiceImpl implements AppointmentService{
                 doctor.setClinics(new ArrayList<>());
             }
             doctor.getClinics().add(clinicBuilder);
+            appointment.setClinic(clinicBuilder);
             doctorRepository.save(doctor);
+        } else {
+            appointment.setClinic(returnedClinic);
         }
-        appointment.setAppointmentDateTime(appointmentDTORequest.getAppointmentDateTime());
+        /////////////////////////////
+        LocalDate appointmentDate = LocalDate.parse(appointmentDTORequest.getAppointmentDate());
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+        LocalTime appointmentTime;
+
+        try {
+            appointmentTime = LocalTime.parse(appointmentDTORequest.getAppointmentTime(), timeFormatter);
+        } catch (DateTimeParseException e) {
+            throw new RuntimeException("Invalid time format");
+        }
+
+        LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+
+        /////////////////////////////
+        appointment.setAppointmentDateTime(appointmentDateTime);
         appointmentRepository.save(appointment);
+        //////////////////////////////
+//        doctor.getAppointments().add(appointment);
         return new AppointmentDTOResponse(appointment.getId(),doctor, null, appointment.getClinic(), appointment.getAppointmentDateTime(), EAppointmentStatus.AVAILABLE, appointment.getFees());
     }
     @Override
@@ -88,8 +114,22 @@ public class AppointmentServiceImpl implements AppointmentService{
                 doctorRepository.save(doctor);
             }
         }
-        if (appointmentDTORequest.getAppointmentDateTime()!=null){
-            appointment.setAppointmentDateTime(appointmentDTORequest.getAppointmentDateTime());
+        if (appointmentDTORequest.getAppointmentDate()!=null||appointmentDTORequest.getAppointmentTime()!=null){
+            /////////////////////////////
+            LocalDate appointmentDate = LocalDate.parse(appointmentDTORequest.getAppointmentDate());
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+            LocalTime appointmentTime;
+
+            try {
+                appointmentTime = LocalTime.parse(appointmentDTORequest.getAppointmentTime(), timeFormatter);
+            } catch (DateTimeParseException e) {
+                throw new RuntimeException("Invalid time format");
+            }
+
+            LocalDateTime appointmentDateTime = LocalDateTime.of(appointmentDate, appointmentTime);
+
+            /////////////////////////////
+            appointment.setAppointmentDateTime(appointmentDateTime);
         }
 
         if (appointmentDTORequest.getFees()!=null){
@@ -99,8 +139,12 @@ public class AppointmentServiceImpl implements AppointmentService{
         return new AppointmentDTOResponse(appointment.getId(),appointment.getDoctor(), appointment.getPatient(), appointment.getClinic(), appointment.getAppointmentDateTime(), appointment.getStatus(), appointment.getFees());
     }
     @Override
-    public void deleteAppointmentById(Long id) {
-        appointmentRepository.deleteById(id);
+    public boolean deleteAppointmentById(Long id) {
+        if (appointmentRepository.existsById(id)) {
+            appointmentRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
     @Override
     public AppointmentDTOResponse book(Long id){
@@ -141,6 +185,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return returnedAppointments;
     }
     //Doctor UI
+    //Doctor My Appointments
     @Override
     public List<AppointmentDetailsDTO> getDoctorAppointmentsWithoutId() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -149,6 +194,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         Doctor doctor = doctorRepository.findByUserId(user.getId()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         return getDoctorAppointmentsById(doctor.getId());
     }
+    //Use it in delete Doctor
     @Override
     public void deleteDoctorAppointmentsById(Long id) {
         List<Appointment> appointments = appointmentRepository.findAppointmentsByDoctor_Id(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
@@ -183,6 +229,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         return returnedAppointments;
     }
     //Patient UI
+    //Patient My Appointments
     @Override
     public List<AppointmentDetailsDTO> getPatientAppointmentsWithoutId() {
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -191,14 +238,28 @@ public class AppointmentServiceImpl implements AppointmentService{
         Patient patient = patientRepository.findPatientById(user.getId()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         return getPatientAppointmentsById(patient.getId());
     }
+    //IN Patient UI
+    //Delete Appointment
     @Override
-    public void deletePatientFromAppointmentsById(Long id) {
-        List<Appointment> appointments = appointmentRepository.findAppointmentsByPatient_Id(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
-        for (Appointment appointment:
-                appointments) {
-            appointment.setStatus(EAppointmentStatus.AVAILABLE);
-            appointment.setPatient(null);
-            appointmentRepository.save(appointment);
+    public boolean deletePatientFromAppointmentsById(Long id) {
+        try {
+            List<Appointment> appointments = appointmentRepository.findAppointmentsByPatient_Id(id)
+                    .orElseThrow(() -> new RuntimeException("No appointments found for the given patient ID."));
+
+            if (appointments.isEmpty()) {
+                return false;
+            }
+
+            for (Appointment appointment : appointments) {
+                appointment.setStatus(EAppointmentStatus.AVAILABLE);
+                appointment.setPatient(null);
+                appointmentRepository.save(appointment);
+            }
+
+            return true;
+        } catch (Exception e) {
+            // Log the exception here
+            return false;
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
 import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.SpecializationDTO;
@@ -70,8 +71,10 @@ public class DoctorServiceImpl implements DoctorService {
         //first get l doctor with the userName
         Doctor doctor = doctorRepository.findByUserName(doctorRequest.getRegisterRequest().getUserName()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         //Then add doctor details:
+        imageService.changeUserImageByDoctorId(doctor.getId(), new ImageModel("photo"+doctor.getId(), doctorRequest.getFile()));
         doctor.setFirstName(doctorRequest.getFirstName());
         doctor.setLastName(doctorRequest.getLastName());
+        doctor.setRating(doctorRequest.getRating());
         doctor.setPhoneNumber(doctorRequest.getPhoneNumber());
         doctor.setPrice(doctorRequest.getPrice());
         doctor.setYearsOfExperience(doctorRequest.getYearsOfExperience());
@@ -115,6 +118,8 @@ public class DoctorServiceImpl implements DoctorService {
                         doctor.setClinics(new ArrayList<>());
                     }
                     doctor.getClinics().add(clinicBuilder);
+                } else {
+                    doctor.getClinics().add(returnedClinic);
                 }
             }
         }
@@ -215,9 +220,14 @@ public class DoctorServiceImpl implements DoctorService {
                         if (!doctor.getClinics().contains(clinicBuilder)) {
                             doctor.getClinics().add(clinicBuilder);
                         }
+                    }else {
+                        doctor.getClinics().add(returnedClinic);
                     }
                 }
             }
+        }
+        if (doctorRequest.getFile()!=null){
+            imageService.changeUserImageByDoctorId(id, new ImageModel("photo"+doctor.getId(), doctorRequest.getFile()));
         }
         doctorRepository.save(doctor);
         return "Successfully updated :b";

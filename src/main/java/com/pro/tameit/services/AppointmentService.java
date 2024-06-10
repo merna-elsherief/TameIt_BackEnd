@@ -21,7 +21,8 @@ public interface AppointmentService {
 
     AppointmentDTOResponse updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest);
 
-    void deleteAppointmentById(Long id);
+
+    boolean deleteAppointmentById(Long id);
 
     AppointmentDTOResponse book(Long id);
 
@@ -31,11 +32,14 @@ public interface AppointmentService {
 
     List<AppointmentDetailsDTO> getDoctorAppointmentsWithoutId();
 
+
     void deleteDoctorAppointmentsById(Long id);
 
     List<AppointmentDetailsDTO> getPatientAppointmentsById(Long id);
 
     List<AppointmentDetailsDTO> getPatientAppointmentsWithoutId();
 
-    void deletePatientFromAppointmentsById(Long id);
+    //IN Patient UI
+    //Delete Appointment
+    boolean deletePatientFromAppointmentsById(Long id);
 }

@@ -1,5 +1,7 @@
 package com.pro.tameit.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +12,7 @@ import com.pro.tameit.domain.EGender;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,6 +20,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "patients")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Patient {
     @Id
     @GeneratedValue
@@ -54,5 +58,8 @@ public class Patient {
 
     @Column(nullable = true)
     private Date birthDate;
+
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Appointment> appointments;
 
 }
