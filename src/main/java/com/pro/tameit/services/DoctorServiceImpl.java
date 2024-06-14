@@ -2,6 +2,8 @@ package com.pro.tameit.services;
 
 import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
+import com.pro.tameit.dao.DoctorSearchDao;
+import com.pro.tameit.dao.DoctorSearchRequest;
 import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.DoctorRequest;
@@ -31,6 +33,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final AppointmentService appointmentService;
     private final ClinicService clinicService;
     private final ImageService imageService;
+    private final DoctorSearchDao doctorSearchDao;
     @Override
     public List<DoctorCardResponse> getAll() {
         return doctorRepository.findAll().stream()
@@ -38,8 +41,8 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
     }
     @Override
-    public List<DoctorCardResponse> searchDoctors(String query) {
-        List<Doctor> doctors = doctorRepository.findDoctorByFirstNameContainingIgnoreCaseAndLastNameContainingIgnoreCase(query, query);
+    public List<DoctorCardResponse> searchDoctors(DoctorSearchRequest query) {
+        List<Doctor> doctors = doctorSearchDao.findAllByCriteria(query);
         return doctors.stream()
                 .map(this::mapToDoctorCardResponse)
                 .collect(Collectors.toList());

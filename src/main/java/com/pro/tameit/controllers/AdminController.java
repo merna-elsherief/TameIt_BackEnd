@@ -78,7 +78,17 @@ public class AdminController {
     }
     //update doctor
     @PatchMapping("/editDoctor/{id}")
-    public ResponseEntity<?> editDoctor(@PathVariable Long id, @RequestBody DoctorRequest doctorRequest){
+    public ResponseEntity<?> editDoctor(@PathVariable Long id,
+                                        @RequestParam("file") MultipartFile file,
+                                        @RequestParam("json") String jsonString){
+        ObjectMapper objectMapper = new ObjectMapper();
+        DoctorRequest doctorRequest;
+        try {
+            doctorRequest = objectMapper.readValue(jsonString, DoctorRequest.class);
+            doctorRequest.setFile(file);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Invalid JSON");
+        }
         return new ResponseEntity<>(doctorService.updateDoctor(id, doctorRequest),HttpStatus.OK);
     }
     //delete doctor
