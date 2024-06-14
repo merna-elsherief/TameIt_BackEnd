@@ -130,7 +130,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
     @Override
     public DoctorCardResponse findDoctorById(Long id) {
-        Doctor doctor = doctorRepository.findByUserId(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        Doctor doctor = doctorRepository.findDoctorById(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         return mapToDoctorCardResponse(doctor);
     }
     @Override
