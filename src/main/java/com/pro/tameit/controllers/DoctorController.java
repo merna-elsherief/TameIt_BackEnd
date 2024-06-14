@@ -2,6 +2,7 @@ package com.pro.tameit.controllers;
 
 import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
+import com.pro.tameit.dao.DoctorSearchRequest;
 import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.services.DoctorService;
@@ -33,7 +34,7 @@ public class DoctorController {
     }
 
     @GetMapping("/byName")
-    public ResponseEntity<?> searchDoctors(@RequestBody String query) {
+    public ResponseEntity<?> searchDoctors(@RequestBody DoctorSearchRequest query) {
         try {
             List<DoctorCardResponse> doctorList = doctorService.searchDoctors(query);
             if (doctorList.isEmpty()) {
