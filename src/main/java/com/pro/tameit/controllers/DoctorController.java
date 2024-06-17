@@ -33,7 +33,7 @@ public class DoctorController {
         }
     }
 
-    @GetMapping("/byName")
+    @PostMapping("/byName")
     public ResponseEntity<?> searchDoctors(@RequestBody DoctorSearchRequest query) {
         try {
             List<DoctorCardResponse> doctorList = doctorService.searchDoctors(query);
