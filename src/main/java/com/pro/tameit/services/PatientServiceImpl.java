@@ -1,7 +1,7 @@
 package com.pro.tameit.services;
 
-import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.PatientRequest;
+import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.dto.response.PatientResponse;
 import com.pro.tameit.models.*;
 import com.pro.tameit.repo.PatientRepository;
@@ -25,6 +25,7 @@ public class PatientServiceImpl implements PatientService{
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final AppointmentService appointmentService;
+    private final SharedServicesImpl sharedServices;
     @Override
     public Patient editPatient(PatientRequest request) throws ParseException {
         //First get the user from our SecurityContextHolder
@@ -83,6 +84,26 @@ public class PatientServiceImpl implements PatientService{
         userRepository.deleteById(patient.getUser().getId());
         patientRepository.deleteById(id);
     }
+    @Override
+    public List<DoctorCardResponse> getMyDoctors() {
+        //First get the user from our SecurityContextHolder
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        //Second get the patient
+        Patient patient = patientRepository.findByUserId(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        List<Doctor> doctors = patientRepository.findMyDoctors(patient.getId()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        if (doctors.isEmpty()){
+            return null;
+        } else {
+            List<DoctorCardResponse> responseList = new ArrayList<>();
+            for (Doctor d:
+                 doctors) {
+                responseList.add(sharedServices.mapToDoctorCardResponse(d));
+            }
+            return responseList;
+        }
+
+    }
+    @Override
     public PatientResponse mapToPatientResponse(Patient patient) {
         PatientResponse patientResponse = new PatientResponse();
 

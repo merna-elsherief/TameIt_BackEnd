@@ -17,14 +17,13 @@ import javax.print.Doc;
 import java.util.List;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping
 @RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
-    private final UserService userService;
     private final ImageService imageService;
 
-    @GetMapping("/getAllDoctors")
+    @GetMapping("/auth/getAllDoctors")
     public ResponseEntity<?> getAllDoctors(){
         try {
             return ResponseEntity.ok(doctorService.getAll());
@@ -33,7 +32,7 @@ public class DoctorController {
         }
     }
 
-    @PostMapping("/byName")
+    @PostMapping("/auth/byName")
     public ResponseEntity<?> searchDoctors(@RequestBody DoctorSearchRequest query) {
         try {
             List<DoctorCardResponse> doctorList = doctorService.searchDoctors(query);
@@ -47,7 +46,7 @@ public class DoctorController {
         }
     }
 
-//    @GetMapping("/sort")
+//    @GetMapping("/auth/sort")
 //    public ResponseEntity<?> sortDoctors(@RequestParam(required = false, defaultValue = "asc") String order) {
 //        try {
 //            List<String> sortedDoctorList = doctorService.sortDoctors(order);
@@ -61,7 +60,7 @@ public class DoctorController {
 //            return ResponseEntity.badRequest().body("sort failed: " + e.getMessage());
 //        }
 //    }
-    @GetMapping("/doctorCard/{id}")
+    @GetMapping("/auth/doctorCard/{id}")
     public ResponseEntity<?> doctorCard(@PathVariable Long id) {
         try {
             DoctorCardResponse doctorCardResponse = doctorService.findDoctorById(id);
@@ -70,10 +69,18 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("doctor doesn't found.");
         }
     }
-    @PatchMapping("/changeUserImage/{id}")
+    @PatchMapping("/auth/changeUserImage/{id}")
     public ResponseEntity<?> changeDoctorImage(@PathVariable Long id, ImageModel imageModel) {
         try {
             return ResponseEntity.ok(imageService.changeUserImageByDoctorId(id, imageModel));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    @GetMapping("/doctor/myPatients")
+    public ResponseEntity<?> myPatients() {
+        try {
+            return ResponseEntity.ok(doctorService.getMyPatients());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

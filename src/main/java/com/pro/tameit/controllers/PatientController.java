@@ -29,4 +29,12 @@ public class PatientController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    @GetMapping("/myDoctors")
+    public ResponseEntity<?> myDoctors() {
+        try {
+            return ResponseEntity.ok(service.getMyDoctors());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

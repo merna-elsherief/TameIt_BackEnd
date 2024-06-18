@@ -19,5 +19,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("select p from Patient p where p.user.userName = ?1")
     Optional<Patient> findByUserId(String userName);
 
-
+    @Query("select DISTINCT d from Doctor d JOIN d.appointments a WHERE d.id = a.doctor.id AND  a.patient.id = ?1")
+    Optional<List<Doctor>> findMyDoctors(Long id);
 }

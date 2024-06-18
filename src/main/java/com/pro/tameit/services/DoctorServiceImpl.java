@@ -8,17 +8,21 @@ import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.SpecializationDTO;
 import com.pro.tameit.dto.request.DoctorRequest;
 import com.pro.tameit.dto.response.DoctorCardResponse;
+import com.pro.tameit.dto.response.PatientResponse;
 import com.pro.tameit.models.Clinic;
 import com.pro.tameit.models.Doctor;
+import com.pro.tameit.models.Patient;
 import com.pro.tameit.models.Specialization;
 import com.pro.tameit.repo.ClinicRepository;
 import com.pro.tameit.repo.DoctorRepository;
 import com.pro.tameit.repo.SpecializationRepository;
 import com.pro.tameit.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,6 +38,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final ClinicService clinicService;
     private final ImageService imageService;
     private final DoctorSearchDao doctorSearchDao;
+    private final SharedServicesImpl sharedServices;
     @Override
     public List<DoctorCardResponse> getAll() {
         return doctorRepository.findAll().stream()
@@ -47,25 +52,14 @@ public class DoctorServiceImpl implements DoctorService {
                 .map(this::mapToDoctorCardResponse)
                 .collect(Collectors.toList());
     }
-//    @Override
-//    public List<DoctorCardResponse> sortDoctors(String order) {
-//        List<Doctor> doctors = doctorRepository.findAll();
-//
-//        if (order.equalsIgnoreCase("asc")) {
-//            return doctors.stream()
-//                    .map(this::mapToDoctorCardResponse)
-//                    .sorted()
-//                    .collect(Collectors.toList());
-//        } else if (order.equalsIgnoreCase("desc")) {
-//            return doctors.stream()
-//                    .map(this::mapToDoctorCardResponse)
-//                    .sorted(Comparator.reverseOrder())
-//                    .collect(Collectors.toList());
-//        } else {
-//            // Invalid order, return empty list
-//            return List.of();
-//        }
-//    }
+    @Override
+    public List<DoctorCardResponse> sortDoctors(DoctorSearchRequest query) {
+        List<Doctor> doctors = doctorSearchDao.findAllByCriteria(query);
+        return doctors.stream()
+                .sorted(Comparator.comparing(Doctor::getFirstName).reversed())
+                .map(this::mapToDoctorCardResponse)
+                .collect(Collectors.toList());
+    }
     @Override
     public String addDoctor(DoctorRequest doctorRequest) {
         //add Doctor To USER DB & DOCTOR DB
@@ -234,6 +228,25 @@ public class DoctorServiceImpl implements DoctorService {
         }
         doctorRepository.save(doctor);
         return "Successfully updated :b";
+    }
+    @Override
+    public List<PatientResponse> getMyPatients() {
+        //First get the user from our SecurityContextHolder
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        //Second get the Doctor
+        Doctor doctor = doctorRepository.findByUserName(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        List<Patient> patients = doctorRepository.findMyPatients(doctor.getId()).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
+        if (patients.isEmpty()){
+            return null;
+        } else {
+            List<PatientResponse> responseList = new ArrayList<>();
+            for (Patient p:
+                    patients) {
+                responseList.add(sharedServices.mapToPatientResponse(p));
+            }
+            return responseList;
+        }
+
     }
     @Override
     public DoctorCardResponse mapToDoctorCardResponse(Doctor doctor) {
