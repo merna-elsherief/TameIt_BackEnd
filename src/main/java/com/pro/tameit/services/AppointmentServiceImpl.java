@@ -241,6 +241,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     @Override
     public AppointmentDetailsDTO mapToAppointmentDetailsDTO(Appointment appointment) {
         AppointmentDetailsDTO appointmentDetailsDTO = new AppointmentDetailsDTO();
+        appointmentDetailsDTO.setId(appointment.getId());
         appointmentDetailsDTO.setDoctorFName(appointment.getDoctor().getFirstName());
         appointmentDetailsDTO.setDoctorLName(appointment.getDoctor().getLastName());
 
