@@ -1,5 +1,6 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.dao.PatientSearchRequest;
 import com.pro.tameit.dto.request.PatientRequest;
 import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.dto.response.PatientResponse;
@@ -15,6 +16,8 @@ public interface PatientService {
 
 
     List<PatientResponse> getAll();
+
+    List<PatientResponse> searchPatients(PatientSearchRequest query);
 
     void deletePatient(Long id);
 

@@ -1,5 +1,7 @@
 package com.pro.tameit.services;
 
+import com.pro.tameit.dao.PatientSearchDao;
+import com.pro.tameit.dao.PatientSearchRequest;
 import com.pro.tameit.dto.request.PatientRequest;
 import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.dto.response.PatientResponse;
@@ -26,6 +28,7 @@ public class PatientServiceImpl implements PatientService{
     private final PatientRepository patientRepository;
     private final AppointmentService appointmentService;
     private final SharedServicesImpl sharedServices;
+    private final PatientSearchDao patientSearchDao;
     @Override
     public Patient editPatient(PatientRequest request) throws ParseException {
         //First get the user from our SecurityContextHolder
@@ -74,6 +77,13 @@ public class PatientServiceImpl implements PatientService{
     @Override
     public List<PatientResponse> getAll() {
         return patientRepository.findAll().stream()
+                .map(this::mapToPatientResponse)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<PatientResponse> searchPatients(PatientSearchRequest query) {
+        List<Patient> patients = patientSearchDao.findAllByCriteria(query);
+        return patients.stream()
                 .map(this::mapToPatientResponse)
                 .collect(Collectors.toList());
     }
