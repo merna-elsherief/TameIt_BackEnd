@@ -28,4 +28,5 @@ public class AppointmentDTOResponse {
     private LocalDateTime appointmentDateTime;
     private EAppointmentStatus status;
     private BigDecimal fees;
+    private Boolean isOnline;
 }

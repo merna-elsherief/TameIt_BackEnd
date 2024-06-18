@@ -60,18 +60,22 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointment.setFees(appointmentDTORequest.getFees());
         appointment.setStatus(EAppointmentStatus.AVAILABLE);
         //first hn4of l clinic 3ndna f l DB or not
-        Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(appointmentDTORequest.getClinic().getClinicName());
-        if (returnedClinic == null){
-            Clinic clinicBuilder = Clinic.builder().clinicName(appointmentDTORequest.getClinic().getClinicName()).address(appointmentDTORequest.getClinic().getAddress()).phoneNumber(appointmentDTORequest.getClinic().getPhoneNumber()).build();
-            clinicRepository.save(clinicBuilder);
-            if (doctor.getClinics()==null){
-                doctor.setClinics(new ArrayList<>());
+        if (!appointmentDTORequest.getIsOnline()) {
+            Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(appointmentDTORequest.getClinic().getClinicName());
+            if (returnedClinic == null) {
+                Clinic clinicBuilder = Clinic.builder().clinicName(appointmentDTORequest.getClinic().getClinicName()).address(appointmentDTORequest.getClinic().getAddress()).phoneNumber(appointmentDTORequest.getClinic().getPhoneNumber()).build();
+                clinicRepository.save(clinicBuilder);
+                if (doctor.getClinics() == null) {
+                    doctor.setClinics(new ArrayList<>());
+                }
+                doctor.getClinics().add(clinicBuilder);
+                appointment.setClinic(clinicBuilder);
+                doctorRepository.save(doctor);
+            } else {
+                appointment.setClinic(returnedClinic);
             }
-            doctor.getClinics().add(clinicBuilder);
-            appointment.setClinic(clinicBuilder);
-            doctorRepository.save(doctor);
         } else {
-            appointment.setClinic(returnedClinic);
+            appointment.setClinic(null);
         }
         /////////////////////////////
         LocalDate appointmentDate = LocalDate.parse(appointmentDTORequest.getAppointmentDate());
@@ -91,7 +95,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         appointmentRepository.save(appointment);
         //////////////////////////////
 //        doctor.getAppointments().add(appointment);
-        return new AppointmentDTOResponse(appointment.getId(),doctor, null, appointment.getClinic(), appointment.getAppointmentDateTime(), EAppointmentStatus.AVAILABLE, appointment.getFees());
+        return new AppointmentDTOResponse(appointment.getId(),doctor, null, appointment.getClinic(), appointment.getAppointmentDateTime(), EAppointmentStatus.AVAILABLE, appointment.getFees(), appointment.getIsOnline());
     }
     @Override
     public AppointmentDetailsDTO updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest){
@@ -104,17 +108,22 @@ public class AppointmentServiceImpl implements AppointmentService{
             appointment.setPatient(appointmentDTORequest.getPatient());
             appointment.setStatus(EAppointmentStatus.BOOKED);
         }
-        if (appointmentDTORequest.getClinic()!=null){
-            Doctor doctor = appointment.getDoctor();
-            Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(appointmentDTORequest.getClinic().getClinicName());
-            if (returnedClinic == null){
-                Clinic clinicBuilder = Clinic.builder().clinicName(appointmentDTORequest.getClinic().getClinicName()).address(appointmentDTORequest.getClinic().getAddress()).phoneNumber(appointmentDTORequest.getClinic().getPhoneNumber()).build();
-                clinicRepository.save(clinicBuilder);
-                if (doctor.getClinics()==null){
-                    doctor.setClinics(new ArrayList<>());
+        if (appointmentDTORequest.getIsOnline()!=null){
+            appointment.setIsOnline(appointmentDTORequest.getIsOnline());
+            if (!appointmentDTORequest.getIsOnline()){
+                if (appointmentDTORequest.getClinic()!=null){
+                    Doctor doctor = appointment.getDoctor();
+                    Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(appointmentDTORequest.getClinic().getClinicName());
+                    if (returnedClinic == null){
+                        Clinic clinicBuilder = Clinic.builder().clinicName(appointmentDTORequest.getClinic().getClinicName()).address(appointmentDTORequest.getClinic().getAddress()).phoneNumber(appointmentDTORequest.getClinic().getPhoneNumber()).build();
+                        clinicRepository.save(clinicBuilder);
+                        if (doctor.getClinics()==null){
+                            doctor.setClinics(new ArrayList<>());
+                        }
+                        doctor.getClinics().add(clinicBuilder);
+                        doctorRepository.save(doctor);
+                    }
                 }
-                doctor.getClinics().add(clinicBuilder);
-                doctorRepository.save(doctor);
             }
         }
         if (appointmentDTORequest.getAppointmentDate()!=null||appointmentDTORequest.getAppointmentTime()!=null){
@@ -254,9 +263,17 @@ public class AppointmentServiceImpl implements AppointmentService{
             appointmentDetailsDTO.setPatientLName(null);
         }
 
-        appointmentDetailsDTO.setClinicName(appointment.getClinic().getClinicName());
-        appointmentDetailsDTO.setClinicAddress(appointment.getClinic().getAddress());
-        appointmentDetailsDTO.setClinicPhoneNumber(appointment.getClinic().getPhoneNumber());
+        if (appointment.getIsOnline()) {
+            appointmentDetailsDTO.setClinicName(null);
+            appointmentDetailsDTO.setClinicAddress(null);
+            appointmentDetailsDTO.setClinicPhoneNumber(null);
+        } else {
+            appointmentDetailsDTO.setClinicName(appointment.getClinic().getClinicName());
+            appointmentDetailsDTO.setClinicAddress(appointment.getClinic().getAddress());
+            appointmentDetailsDTO.setClinicPhoneNumber(appointment.getClinic().getPhoneNumber());
+        }
+
+        appointmentDetailsDTO.setIsOnline(appointment.getIsOnline());
 
         appointmentDetailsDTO.setDayOfMonth(appointment.getAppointmentDateTime().getDayOfMonth());
         appointmentDetailsDTO.setDayOfWeek(appointment.getAppointmentDateTime().getDayOfWeek().name());

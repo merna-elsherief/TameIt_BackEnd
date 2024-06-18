@@ -50,4 +50,6 @@ public class Appointment {
 
     @Column(nullable = false)
     private BigDecimal fees;
+
+    private Boolean isOnline;
 }

@@ -45,4 +45,5 @@ public class AppointmentDetailsDTO {
 
     private EAppointmentStatus status;
     private BigDecimal fees;
+    private Boolean isOnline;
 }

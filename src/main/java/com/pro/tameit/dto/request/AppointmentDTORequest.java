@@ -29,4 +29,5 @@ public class AppointmentDTORequest {
     private String appointmentTime;
     private EAppointmentStatus status;
     private BigDecimal fees;
+    private Boolean isOnline;
 }
