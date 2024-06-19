@@ -59,6 +59,7 @@ public class AppointmentServiceImpl implements AppointmentService{
         /////////////////////////////////
         appointment.setFees(appointmentDTORequest.getFees());
         appointment.setStatus(EAppointmentStatus.AVAILABLE);
+        appointment.setIsOnline(appointmentDTORequest.getIsOnline());
         //first hn4of l clinic 3ndna f l DB or not
         if (!appointmentDTORequest.getIsOnline()) {
             Clinic returnedClinic = clinicRepository.findByClinicNameContainsIgnoreCase(appointmentDTORequest.getClinic().getClinicName());
