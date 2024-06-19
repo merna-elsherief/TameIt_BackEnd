@@ -6,8 +6,10 @@ import com.pro.tameit.dto.request.AppointmentDTORequest;
 import com.pro.tameit.dto.response.AppointmentDTOResponse;
 import com.pro.tameit.models.*;
 import com.pro.tameit.repo.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 @Slf4j
 @Service
@@ -153,12 +154,28 @@ public class AppointmentServiceImpl implements AppointmentService{
         return mapToAppointmentDetailsDTO(appointment);
     }
     @Override
-    public boolean deleteAppointmentById(Long id) {
-        if (appointmentRepository.existsById(id)) {
+    @Transactional
+    public void deleteAppointmentById(Long id) {
+        Optional<Appointment> appointmentOpt = appointmentRepository.findById(id);
+        if (appointmentOpt.isPresent()) {
+            Appointment appointment = appointmentOpt.get();
+            Doctor doctor = appointment.getDoctor();
+            Patient patient = appointment.getPatient();
+
+            if (doctor != null) {
+                doctor.getAppointments().remove(appointment);
+                doctorRepository.save(doctor);
+            }
+
+            if (patient != null) {
+                patient.getAppointments().remove(appointment);
+                patientRepository.save(patient);
+            }
+
             appointmentRepository.deleteById(id);
-            return true;
+        } else {
+            throw new RuntimeException("Appointment not found for id " + id);
         }
-        return false;
     }
     @Override
     public AppointmentDetailsDTO book(Long id){

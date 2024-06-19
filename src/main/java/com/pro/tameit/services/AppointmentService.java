@@ -4,6 +4,7 @@ import com.pro.tameit.dto.AppointmentDetailsDTO;
 import com.pro.tameit.dto.request.AppointmentDTORequest;
 import com.pro.tameit.dto.response.AppointmentDTOResponse;
 import com.pro.tameit.models.Appointment;
+import org.springframework.scheduling.annotation.Async;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +23,9 @@ public interface AppointmentService {
 
     AppointmentDetailsDTO updateAppointment(Long id, AppointmentDTORequest appointmentDTORequest);
 
-    boolean deleteAppointmentById(Long id);
 
+    @Async
+    void deleteAppointmentById(Long id);
 
     AppointmentDetailsDTO book(Long id);
 

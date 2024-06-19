@@ -24,12 +24,9 @@ public class AppointmentController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAppointment(@PathVariable Long id) {
         try {
-            boolean isDeleted = appointmentService.deleteAppointmentById(id);
-            if (isDeleted) {
-                return ResponseEntity.ok().body("Appointment deleted successfully.");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Appointment not found.");
-            }
+            appointmentService.deleteAppointmentById(id);
+
+            return ResponseEntity.ok().body("Appointment deleted successfully.");
         } catch (Exception e) {
             // Log the exception here
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the appointment.");
