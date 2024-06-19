@@ -21,8 +21,9 @@ public class UserServiceImpl implements UserService {
     public DetailsResponse details(){
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUserName(userName)
-                .orElseThrow();
+                .orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
         DetailsResponse detailsResponse = new DetailsResponse();
+        detailsResponse.setId(user.getId());
         detailsResponse.setUserName(user.getUsername());
         detailsResponse.setEmail(user.getEmail());
         if (user.getImage() == null){
