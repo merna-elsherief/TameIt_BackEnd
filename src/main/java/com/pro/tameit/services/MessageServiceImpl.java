@@ -13,7 +13,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class MessageServiceImpl implements MessageService{
@@ -34,12 +38,15 @@ public class MessageServiceImpl implements MessageService{
             Doctor doctor = doctorRepository.findDoctorById(message.getReceiverId()).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
             message.setReceiverId(doctor.getUser().getId());
         }
+        message.setTimestamp(LocalDateTime.now());
         return chatMessageRepository.save(message);
     }
 
     @Override
     public List<Message> getMessagesBetweenUsers(Long senderId, Long receiverId) {
-        return chatMessageRepository.findBySenderIdAndReceiverId(senderId, receiverId);
+        return chatMessageRepository.findBySenderIdAndReceiverId(senderId, receiverId).stream()
+                .sorted(Comparator.comparing(Message::getTimestamp))
+                .collect(Collectors.toList());
     }
 
     @Override
