@@ -44,6 +44,16 @@ public class MessageServiceImpl implements MessageService{
 
     @Override
     public List<Message> getMessagesBetweenUsers(Long senderId, Long receiverId) {
+        User user = userRepository.findById(senderId).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
+        if (user.getRole() == ERole.DOCTOR){
+            //then receiverId is patient id
+            Patient patient = patientRepository.findPatientById(receiverId).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
+            receiverId = patient.getUser().getId();
+        } else if (user.getRole() == ERole.PATIENT) {
+            //then receiverId is doctor id
+            Doctor doctor = doctorRepository.findDoctorById(receiverId).orElseThrow(()->new RuntimeException("Please provide an valid userName!"));
+            receiverId = doctor.getUser().getId();
+        }
         return chatMessageRepository.findBySenderIdAndReceiverId(senderId, receiverId).stream()
                 .sorted(Comparator.comparing(Message::getTimestamp))
                 .collect(Collectors.toList());
