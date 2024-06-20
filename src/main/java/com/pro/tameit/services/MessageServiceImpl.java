@@ -55,7 +55,7 @@ public class MessageServiceImpl implements MessageService{
             receiverId = doctor.getUser().getId();
         }
         return chatMessageRepository.findBySenderIdAndReceiverId(senderId, receiverId).stream()
-                .sorted(Comparator.comparing(Message::getTimestamp))
+                .sorted(Comparator.comparing(Message::getTimestamp).reversed())
                 .collect(Collectors.toList());
     }
 
