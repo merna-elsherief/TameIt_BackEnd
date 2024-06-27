@@ -91,8 +91,8 @@ public class PatientServiceImpl implements PatientService{
     public void deletePatient(Long id){
         Patient patient = patientRepository.findUserBPatientId(id).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
         appointmentService.deletePatientFromAppointmentsById(id);
-        userRepository.deleteById(patient.getUser().getId());
         patientRepository.deleteById(id);
+        userRepository.deleteById(patient.getUser().getId());
     }
     @Override
     public List<DoctorCardResponse> getMyDoctors() {
