@@ -27,7 +27,9 @@ public class RegisterRequest {
     @Email(message = "Email is not valid")
     @NotBlank(message = "Email is required")
     private String email;
-
+    private String firstName;
+    private String lastName;
+    private String birthDate;
 
     public boolean isPasswordMatching() {
         return password != null && password.equals(confirmPassword);

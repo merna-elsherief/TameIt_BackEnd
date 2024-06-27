@@ -18,6 +18,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static com.pro.tameit.util.VerificationTokenUtil.generateToken;
 
 @Service
@@ -46,8 +51,19 @@ public class AuthenticationService {
                     .build();
             userRepository.save(user);
             //Add User to Patient DB
+            SimpleDateFormat dateParser = new SimpleDateFormat("dd-MM-yyyy"); //Format for input
+            String date = request.getBirthDate();
+            Date dn = null;
+            try {
+                dn = dateParser.parse(date);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
             Patient patient = Patient.builder()
                     .user(user)
+                    .firstName(request.getFirstName())
+                    .lastName(request.getLastName())
+                    .birthDate(dn)
                     .build();
             patientRepository.save(patient);
             sendVerificationEmail(user);
