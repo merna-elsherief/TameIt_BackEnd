@@ -1,6 +1,5 @@
 package com.pro.tameit.groupTherapy.dto;
 
-import com.pro.tameit.groupTherapy.models.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.pro.tameit.cloudinary.models;
+package com.pro.tameit.cloudinary;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -20,7 +19,7 @@ public class Image {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name_image", unique = false)
+    @Column(name = "name_image")
     private String name;
 
     @Column(name = "url_image")

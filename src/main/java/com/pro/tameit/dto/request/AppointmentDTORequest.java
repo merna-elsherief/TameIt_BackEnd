@@ -2,7 +2,6 @@ package com.pro.tameit.dto.request;
 
 import com.pro.tameit.domain.EAppointmentStatus;
 import com.pro.tameit.dto.ClinicDTO;
-import com.pro.tameit.models.Clinic;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.models.Patient;
 import jakarta.validation.constraints.Future;
@@ -13,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @Builder

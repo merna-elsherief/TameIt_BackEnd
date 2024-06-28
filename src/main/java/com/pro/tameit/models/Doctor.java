@@ -1,8 +1,6 @@
 package com.pro.tameit.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.pro.tameit.domain.DoctorJobTitle;
 import lombok.AllArgsConstructor;
@@ -41,7 +39,7 @@ public class Doctor {
             joinColumns = {@JoinColumn(name = "doctor_id")},
             inverseJoinColumns = {@JoinColumn(name = "specialization_id")}
     )
-    private List<Specialization> specializations = new ArrayList<>();;
+    private List<Specialization> specializations = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "doctor_clinic",

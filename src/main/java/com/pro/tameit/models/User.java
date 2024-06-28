@@ -1,6 +1,6 @@
 package com.pro.tameit.models;
 
-import com.pro.tameit.cloudinary.models.Image;
+import com.pro.tameit.cloudinary.Image;
 import com.pro.tameit.domain.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

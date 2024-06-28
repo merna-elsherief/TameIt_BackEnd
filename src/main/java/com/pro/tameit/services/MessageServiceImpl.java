@@ -10,7 +10,6 @@ import com.pro.tameit.repo.MessageRepository;
 import com.pro.tameit.repo.PatientRepository;
 import com.pro.tameit.repo.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

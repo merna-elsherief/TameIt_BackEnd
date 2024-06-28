@@ -2,7 +2,6 @@ package com.pro.tameit.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.pro.tameit.domain.EAppointmentStatus;
 import lombok.AllArgsConstructor;
@@ -42,7 +41,7 @@ public class Appointment {
     private Clinic clinic;
 
     @Column(nullable = false)
-    private LocalDateTime appointmentDateTime; //m4 3arfa di htt3ml ezay lsa
+    private LocalDateTime appointmentDateTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

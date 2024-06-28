@@ -1,6 +1,5 @@
 package com.pro.tameit.dao;
 
-import com.pro.tameit.models.Doctor;
 import com.pro.tameit.models.Patient;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;

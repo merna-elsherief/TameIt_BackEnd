@@ -1,10 +1,8 @@
 package com.pro.tameit.dto.request;
 
-import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.domain.DoctorJobTitle;
 import com.pro.tameit.domain.EGender;
 import com.pro.tameit.models.Clinic;
-import com.pro.tameit.models.Specialization;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.pro.tameit.cloudinary.config;
+package com.pro.tameit.cloudinary;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

@@ -1,9 +1,9 @@
 package com.pro.tameit.controllers;
+
 import com.pro.tameit.domain.ERole;
 import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.services.AuthenticationService;
 import com.pro.tameit.services.UserService;
-import com.pro.tameit.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;

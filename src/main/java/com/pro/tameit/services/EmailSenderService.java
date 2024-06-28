@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 public class EmailSenderService {
     private final JavaMailSender mailSender;
 
-    //generic b2a 34an n use it in every step like: canceling appointment, adding, forget password, etc...
     @Async
     public void sendVerificationEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();

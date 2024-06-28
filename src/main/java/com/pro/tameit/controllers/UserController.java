@@ -3,7 +3,6 @@ package com.pro.tameit.controllers;
 import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
 import com.pro.tameit.services.UserService;
-import com.pro.tameit.services.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -2,7 +2,6 @@ package com.pro.tameit.dto.response;
 
 import com.pro.tameit.domain.DoctorJobTitle;
 import com.pro.tameit.domain.EGender;
-import com.pro.tameit.dto.request.RegisterRequest;
 import com.pro.tameit.models.Clinic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

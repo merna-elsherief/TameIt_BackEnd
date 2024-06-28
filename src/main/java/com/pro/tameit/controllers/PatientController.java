@@ -1,9 +1,7 @@
 package com.pro.tameit.controllers;
 
-import com.pro.tameit.dao.DoctorSearchRequest;
 import com.pro.tameit.dao.PatientSearchRequest;
 import com.pro.tameit.dto.request.PatientRequest;
-import com.pro.tameit.dto.response.DoctorCardResponse;
 import com.pro.tameit.dto.response.PatientResponse;
 import com.pro.tameit.services.PatientService;
 import lombok.RequiredArgsConstructor;

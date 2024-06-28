@@ -1,4 +1,4 @@
-package com.pro.tameit.cloudinary.controllers;
+package com.pro.tameit.cloudinary;
 
 import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor

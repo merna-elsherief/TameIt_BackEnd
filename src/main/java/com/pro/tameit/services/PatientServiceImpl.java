@@ -35,7 +35,7 @@ public class PatientServiceImpl implements PatientService{
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         //Second get the patient
         Patient patient = patientRepository.findByUserId(userName).orElseThrow(()->new RuntimeException("Something Wrong Happened, Please Try Again!"));
-        //Last h n edit om l patient b2a
+        //Last h n edit l patient b2a
         if (request.getFirstName()!=null){
             patient.setFirstName(request.getFirstName());
         }

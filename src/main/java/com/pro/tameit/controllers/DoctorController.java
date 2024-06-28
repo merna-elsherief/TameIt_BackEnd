@@ -4,16 +4,12 @@ import com.pro.tameit.cloudinary.dto.ImageModel;
 import com.pro.tameit.cloudinary.services.ImageService;
 import com.pro.tameit.dao.DoctorSearchRequest;
 import com.pro.tameit.dto.response.DoctorCardResponse;
-import com.pro.tameit.models.Doctor;
 import com.pro.tameit.services.DoctorService;
-import com.pro.tameit.services.DoctorServiceImpl;
-import com.pro.tameit.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.util.List;
 
 @RestController

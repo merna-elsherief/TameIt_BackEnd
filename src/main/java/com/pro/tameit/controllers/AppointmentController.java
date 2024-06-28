@@ -1,7 +1,6 @@
 package com.pro.tameit.controllers;
 
 import com.pro.tameit.dto.request.AppointmentDTORequest;
-import com.pro.tameit.dto.request.DoctorRequest;
 import com.pro.tameit.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

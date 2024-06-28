@@ -1,8 +1,8 @@
 package com.pro.tameit.cloudinary.services;
 
 import com.pro.tameit.cloudinary.dto.ImageModel;
-import com.pro.tameit.cloudinary.models.Image;
-import com.pro.tameit.cloudinary.repo.ImageRepository;
+import com.pro.tameit.cloudinary.Image;
+import com.pro.tameit.cloudinary.ImageRepository;
 import com.pro.tameit.models.Doctor;
 import com.pro.tameit.models.User;
 import com.pro.tameit.repo.DoctorRepository;
