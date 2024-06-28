@@ -56,49 +56,95 @@ public class AdminController {
         ObjectMapper objectMapper = new ObjectMapper();
         DoctorRequest doctorRequest;
         try {
+            //validate json
             doctorRequest = objectMapper.readValue(jsonString, DoctorRequest.class);
-            doctorRequest.setFile(file);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Invalid JSON");
         }
-        return new ResponseEntity<>(doctorService.addDoctor(doctorRequest),HttpStatus.CREATED);
+        try {
+            // Validate file
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("File is empty");
+            }
+
+            doctorRequest.setFile(file);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error processing file: " + e.getMessage());
+        }
+
+        try {
+            // Add doctor
+            return new ResponseEntity<>(doctorService.addDoctor(doctorRequest), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding doctor: " + e.getMessage());
+        }
     }
     //Create Specialization
     @PostMapping("/addSpecialization")
     public ResponseEntity<?> addSpecialization(@RequestBody SpecializationDTO specializationDTO){
-        return new ResponseEntity<>(specializationService.addSpecialization(specializationDTO),HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(specializationService.addSpecialization(specializationDTO),HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding specialization: " + e.getMessage());
+        }
     }
     //Create Clinic
     @PostMapping("/addClinic")
     public ResponseEntity<?> addClinic(@RequestBody ClinicDTO clinicDTO){
-        return new ResponseEntity<>(clinicService.addClinic(clinicDTO),HttpStatus.CREATED);
+        try {
+            return new ResponseEntity<>(clinicService.addClinic(clinicDTO), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding clinic: " + e.getMessage());
+        }
     }
     //update doctor
     @PatchMapping("/editDoctor/{id}")
     public ResponseEntity<?> editDoctor(@PathVariable Long id,
-                                        @RequestParam("file") MultipartFile file,
+                                        @RequestParam(value = "file", required = false) MultipartFile file,
                                         @RequestParam("json") String jsonString){
         ObjectMapper objectMapper = new ObjectMapper();
         DoctorRequest doctorRequest;
         try {
+            // Validate JSON
             doctorRequest = objectMapper.readValue(jsonString, DoctorRequest.class);
-            doctorRequest.setFile(file);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Invalid JSON");
         }
-        return new ResponseEntity<>(doctorService.updateDoctor(id, doctorRequest),HttpStatus.OK);
+        if (file != null && !file.isEmpty()) {
+            try {
+                doctorRequest.setFile(file);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Error processing file: " + e.getMessage());
+            }
+        }else {
+            doctorRequest.setFile(null);
+        }
+        try {
+            // Update doctor
+            return new ResponseEntity<>(doctorService.updateDoctor(id, doctorRequest), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating doctor: " + e.getMessage());
+        }
     }
     //delete doctor
     @DeleteMapping("/deleteDoctor/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id){
-        doctorService.deleteDoctorById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            doctorService.deleteDoctorById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
     //delete patient
     @DeleteMapping("/deletePatient/{id}")
     public ResponseEntity<Void> deletePatient(@PathVariable Long id){
-        patientService.deletePatient(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try {
+            patientService.deletePatient(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
 
