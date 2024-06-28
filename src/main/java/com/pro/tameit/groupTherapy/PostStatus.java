@@ -1,4 +1,4 @@
-package com.pro.tameit.groupTherapy.domain;
+package com.pro.tameit.groupTherapy;
 
 public enum PostStatus {
     PENDING,

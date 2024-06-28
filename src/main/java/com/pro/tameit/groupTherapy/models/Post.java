@@ -2,7 +2,7 @@ package com.pro.tameit.groupTherapy.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.pro.tameit.groupTherapy.domain.PostStatus;
+import com.pro.tameit.groupTherapy.PostStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

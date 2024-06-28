@@ -2,7 +2,7 @@ package com.pro.tameit.groupTherapy.services;
 
 import com.pro.tameit.groupTherapy.dto.CommentDto;
 import com.pro.tameit.groupTherapy.dto.PostDto;
-import com.pro.tameit.groupTherapy.domain.PostStatus;
+import com.pro.tameit.groupTherapy.PostStatus;
 import com.pro.tameit.groupTherapy.models.Comment;
 import com.pro.tameit.groupTherapy.models.Post;
 import com.pro.tameit.groupTherapy.repo.PostRepository;

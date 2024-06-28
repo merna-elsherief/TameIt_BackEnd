@@ -31,6 +31,7 @@ public class AppointmentServiceImpl implements AppointmentService{
     private final UserRepository userRepository;
     private final ClinicRepository clinicRepository;
     private final PatientRepository patientRepository;
+    private final EmailSenderService emailSenderService;
     @Override
     public List<Appointment> findAll() {
         return appointmentRepository.findAll();
@@ -161,7 +162,10 @@ public class AppointmentServiceImpl implements AppointmentService{
             Appointment appointment = appointmentOpt.get();
             Doctor doctor = appointment.getDoctor();
             Patient patient = appointment.getPatient();
-
+            String sub = "Appointment Deleted\n";
+            String body = "Appointment at" + appointment.getAppointmentDateTime() + "was deleted\nBook another one\n";
+            emailSenderService.sendVerificationEmail(doctor.getUser().getEmail(), sub, body);
+            emailSenderService.sendVerificationEmail(patient.getUser().getEmail(), sub, body);
             if (doctor != null) {
                 doctor.getAppointments().remove(appointment);
                 doctorRepository.save(doctor);
