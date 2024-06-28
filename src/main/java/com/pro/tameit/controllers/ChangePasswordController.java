@@ -25,7 +25,7 @@ public class ChangePasswordController {
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest,
                                             Principal principal) {
         String username = principal.getName();
-        User user = userRepository.findByUserName(username).orElseThrow(()->new RuntimeException("Please provide an valid userName!" + username));
+        User user = userRepository.findByUserName(username).orElseThrow(() -> new RuntimeException("User not found: " + username));
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found");
         }
